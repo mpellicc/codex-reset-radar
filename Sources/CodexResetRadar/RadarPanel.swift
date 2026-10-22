@@ -166,6 +166,8 @@ private struct SwitchRow: View {
             Text(title).frame(maxWidth: .infinity, alignment: .leading)
         }
         .toggleStyle(.switch)
+        // System Settings uses the mini switch; the regular one dwarfs the panel's text.
+        .controlSize(.mini)
     }
 }
 
