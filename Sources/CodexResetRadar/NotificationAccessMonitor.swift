@@ -1,6 +1,7 @@
 import AppKit
 import RadarCore
 import UserNotifications
+import os
 
 /// Reads the app's notification settings from the system and says whether they are turned off.
 /// It re-reads whenever the app becomes active or a window becomes key (the panel opening),
@@ -12,20 +13,23 @@ final class NotificationAccessMonitor: ObservableObject {
     private var observers: [NSObjectProtocol] = []
 
     init() {
-        check()
+        check(reason: "launch")
 
         for name in [NSApplication.didBecomeActiveNotification, NSWindow.didBecomeKeyNotification] {
             observers.append(
                 NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
-                    Task { @MainActor in self?.check() }
+                    Task { @MainActor in self?.check(reason: "app or window became active") }
                 })
         }
     }
 
-    func check() {
+    func check(reason: String) {
         // Called back on a background queue, so the closure must not be main-actor isolated.
         UNUserNotificationCenter.current().getNotificationSettings { @Sendable [weak self] settings in
             let access = NotificationAccess(settings)
+            Log.notify.notice(
+                "notification settings (\(reason, privacy: .public)): authorization \(String(describing: access.authorization), privacy: .public), alerts \(String(describing: access.alerts), privacy: .public), warning \(access.isOff ? "shown" : "hidden", privacy: .public)"
+            )
             Task { @MainActor in self?.isOff = access.isOff }
         }
     }

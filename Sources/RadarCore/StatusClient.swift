@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 public struct StatusData: Decodable, Sendable {
     public let latestReset: Reset?
@@ -80,15 +81,23 @@ public actor StatusClient {
 
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw URLError(.badServerResponse) }
-        if http.statusCode == 304, let cached { return cached }
+        if http.statusCode == 304, let cached {
+            Log.poll.notice("fetch 304 not modified, reusing the cached status (ETag matched)")
+            return cached
+        }
         guard http.statusCode == 200 else {
             let retryAfter = RetryAfter.date(from: http.value(forHTTPHeaderField: "Retry-After"), now: Date())
+            let retryAfterText = retryAfter?.ISO8601Format() ?? "none"
+            Log.poll.error(
+                "fetch HTTP \(http.statusCode, privacy: .public), Retry-After \(retryAfterText, privacy: .public)")
             throw StatusError.http(http.statusCode, retryAfter: retryAfter)
         }
 
         let status = try Self.decode(data)
         etag = http.value(forHTTPHeaderField: "ETag")
         cached = status
+        let etagText = etag == nil ? "no ETag to reuse" : "ETag stored for the next request"
+        Log.poll.notice("fetch 200 OK, \(etagText, privacy: .public)")
         return status
     }
 

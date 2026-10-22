@@ -4,6 +4,7 @@
 "Check now" = "Controlla ora";
 "%@ announced" = "%@ annunciato";
 "Scheduled time passed, waiting for it to land" = "Orario previsto passato, in attesa che arrivi";
+"in %@" = "tra %@";
 "Time not given yet" = "Orario non ancora comunicato";
 "View post" = "Vedi il post";
 "No reset announced" = "Nessun reset annunciato";
@@ -26,6 +27,10 @@
 "Open Notification Settings" = "Apri impostazioni Notifiche";
 "Version %@ available —" = "Versione %@ disponibile —";
 "Download" = "Scarica";
+"Notify me about" = "Avvisami per";
+"Announced" = "Annuncio";
+"Reminder" = "Promemoria";
+"Landed" = "Arrivo";
 
 /* Reset types */
 "Reset" = "Reset";

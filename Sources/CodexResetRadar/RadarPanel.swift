@@ -33,7 +33,7 @@ struct RadarPanel: View {
             Text("Codex Reset Radar").font(.headline)
             Spacer()
             Button {
-                model.refresh()
+                model.refresh(.manual)
             } label: {
                 Image(systemName: "arrow.clockwise")
             }
@@ -54,7 +54,7 @@ struct RadarPanel: View {
                     Text(Format.when(when)).font(.title3.weight(.semibold))
                     Text(
                         when > model.now
-                            ? "in \(Format.spokenCountdown(to: when, from: model.now))"
+                            ? String(localized: "in \(Format.spokenCountdown(to: when, from: model.now))")
                             : String(localized: "Scheduled time passed, waiting for it to land")
                     )
                     .foregroundStyle(.secondary)
@@ -105,6 +105,7 @@ struct RadarPanel: View {
             }
             LaunchAtLoginToggle()
                 .disabled(isTranslocated)
+            NotificationSwitches()
             HStack {
                 Link("Data from codex-resets.com", destination: URL(string: "https://codex-resets.com")!)
                     .font(.caption)
@@ -208,6 +209,32 @@ private struct LaunchAtLoginToggle: View {
                 : String(localized: "Couldn't disable launch at login: \(reason)")
         }
         state = Self.currentState()
+    }
+}
+
+/// One checkbox per kind of notification, applied as soon as it is clicked.
+private struct NotificationSwitches: View {
+    @EnvironmentObject private var model: RadarModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Notify me about")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Toggle("Announced", isOn: binding(\.announced))
+            Toggle("Reminder", isOn: binding(\.reminder))
+            Toggle("Landed", isOn: binding(\.landed))
+        }
+    }
+
+    private func binding(_ kind: WritableKeyPath<NotificationPreferences, Bool>) -> Binding<Bool> {
+        Binding(
+            get: { model.notificationPreferences[keyPath: kind] },
+            set: { wanted in
+                var preferences = model.notificationPreferences
+                preferences[keyPath: kind] = wanted
+                model.setNotificationPreferences(preferences)
+            })
     }
 }
 

@@ -64,6 +64,15 @@ so it fires once per `id` and `scheduled_for`. It is removed when the reset land
 It is skipped when the reset is announced less than 15 minutes ahead: the announcement covers it.
 Clicking the reminder opens the source post.
 
+**Notification switches.** Each kind can be turned off on its own: **Announced** ("reset announced"
+and "rescheduled"), **Reminder** ("in 15 minutes") and **Landed** ("reset landed"). All three are on by
+default. They are kept in `UserDefaults` (`notifyAnnounced`, `notifyReminder`, `notifyLanded`; a missing
+key reads as on) and apply at once, without a restart. A switched-off kind is never sent, but the
+trackers keep recording what they see (the notified pairs and the last seen `latest_reset.id`), so
+switching it back on does not send what was skipped in the meantime. Turning Reminder off removes the
+scheduled reminder request; turning it back on schedules it again for the pending dated reset right away,
+not at the next poll. The menu bar countdown and the panel's reset details are not affected.
+
 **Menu bar.** Radar icon. When a dated reset is pending, the icon is followed by a
 countdown: `45m`, `1h 59m`, `9h`, `3d`, or `due` once the time has passed. After 2 consecutive failed
 polls (being offline counts) the icon becomes a slashed antenna, until the next successful
@@ -84,7 +93,9 @@ poll; the countdown stays next to it. VoiceOver reads the item as a sentence, fo
 - Last checked time, error if the last poll failed.
 - When the update check found a newer release: "Version X available — Download", linking to
   the release page.
-- Launch at login toggle, "Data from codex-resets.com" link, Quit.
+- Launch at login toggle, then under a small "Notify me about" heading three checkboxes:
+  Announced, Reminder, Landed (see Notification switches), then the "Data from codex-resets.com"
+  link and Quit.
 - The toggle reads the login item status every time the panel opens. A failed change
   leaves the toggle at the real status and shows the error under it. When the item needs
   approval, the toggle stays on and a hint with a button opens System Settings → General → Login Items.
@@ -102,4 +113,4 @@ poll; the countdown stays next to it. VoiceOver reads the item as a sentence, fo
 ## Out of scope for v1
 
 Watch forecast, Slack, installing updates (the app only checks for them), settings beyond
-launch at login.
+launch at login and the notification switches.

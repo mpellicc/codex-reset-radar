@@ -4,6 +4,26 @@ All notable changes to this project are documented here. The format follows
 [Conventional Commits](https://www.conventionalcommits.org/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.7.0](https://github.com/mpellicc/codex-reset-radar/compare/v0.6.3...v0.7.0) (2026-10-22)
+
+
+### Features
+
+* add logging with os.Logger ([#51](https://github.com/mpellicc/codex-reset-radar/issues/51)) ([1fad22d](https://github.com/mpellicc/codex-reset-radar/commit/1fad22dd1a2fc87065da57d02d7005635abf1eab))
+* turn announced, reminder and landed notifications on or off separately ([#50](https://github.com/mpellicc/codex-reset-radar/issues/50)) ([68b0d4d](https://github.com/mpellicc/codex-reset-radar/commit/68b0d4d23879234c48acd9665bd9aee5a8f84815))
+
+## [0.6.3](https://github.com/mpellicc/codex-reset-radar/compare/v0.6.2...v0.6.3) (2026-10-22)
+
+
+### Bug Fixes
+
+* size the panel to its content and drop the focus ring ([#47](https://github.com/mpellicc/codex-reset-radar/issues/47)) ([8c355d7](https://github.com/mpellicc/codex-reset-radar/commit/8c355d7dda4724b0993d73ed4b6f65944c45b4a0))
+
+
+### Documentation
+
+* add latest release and CI badges to the README ([#45](https://github.com/mpellicc/codex-reset-radar/issues/45)) ([fe2b742](https://github.com/mpellicc/codex-reset-radar/commit/fe2b74250d8bdb411771a665dbb1a1b41bfbe086))
+
 ## [0.6.2](https://github.com/mpellicc/codex-reset-radar/compare/v0.6.1...v0.6.2) (2026-10-22)
 
 ### Miscellaneous

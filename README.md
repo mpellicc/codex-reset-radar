@@ -26,7 +26,19 @@ Requires macOS 13 or later.
 - Checks codex-resets.com every 15 minutes and after your Mac wakes.
 - When a reset with a date is announced, sends a notification (and another if the time changes).
 - Shows a countdown next to the menu bar icon (`9h`, `1h 59m`, `45m`, `due`) until it lands.
+- Lets you turn announced, reminder and landed notifications on or off separately, from the panel.
 - Speaks your macOS language (English or Italian so far); announcement posts stay in their original wording.
+
+## Troubleshooting
+
+If a notification didn't arrive or the app misbehaves, it logs every poll and notification decision.
+Run this in Terminal and paste the output into your bug report:
+
+```bash
+log show --last 1d --predicate 'subsystem == "dev.mpellicc.CodexResetRadar"' --info
+```
+
+The log holds only public data: reset ids, announcement text, times and HTTP status codes.
 
 ## Build
 
