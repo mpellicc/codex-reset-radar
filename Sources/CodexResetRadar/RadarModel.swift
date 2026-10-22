@@ -14,6 +14,8 @@ final class RadarModel: ObservableObject {
     @Published private(set) var isOffline = false
     /// Ticks every minute so countdowns stay current between polls.
     @Published private(set) var now = Date()
+    /// Which kinds of notification are switched on.
+    @Published private(set) var notificationPreferences: NotificationPreferences
 
     private static let pollInterval: TimeInterval = 15 * 60
 
@@ -31,6 +33,7 @@ final class RadarModel: ObservableObject {
     private var retryNotBefore: Date?
 
     init() {
+        notificationPreferences = notifier.preferences
         refresh(.launch)
 
         let poll = Timer.scheduledTimer(withTimeInterval: Self.pollInterval, repeats: true) { [weak self] _ in
@@ -59,6 +62,11 @@ final class RadarModel: ObservableObject {
     }
 
     var pending: ScheduledReset? { status?.scheduledReset }
+
+    func setNotificationPreferences(_ preferences: NotificationPreferences) {
+        notifier.update(preferences)
+        notificationPreferences = preferences
+    }
 
     func refresh(_ trigger: RefreshTrigger) {
         guard !isRefreshing else {
