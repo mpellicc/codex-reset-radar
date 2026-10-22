@@ -22,7 +22,10 @@ struct RadarPanel: View {
         }
         .padding(14)
         .frame(width: 320)
+        // Report the content's exact height, so the panel window fits it instead of leaving blank strips.
+        .fixedSize(horizontal: false, vertical: true)
         .tint(.signalBlue)
+        .modifier(NoFocusEffect())
     }
 
     private var header: some View {
@@ -109,6 +112,18 @@ struct RadarPanel: View {
                 Button("Quit") { NSApplication.shared.terminate(nil) }
                     .keyboardShortcut("q")
             }
+        }
+    }
+}
+
+/// The panel opens with keyboard focus on its first link, which then shows a focus ring
+/// as if it were selected. Clicking still works; only the ring goes.
+private struct NoFocusEffect: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(macOS 14.0, *) {
+            content.focusEffectDisabled()
+        } else {
+            content
         }
     }
 }
