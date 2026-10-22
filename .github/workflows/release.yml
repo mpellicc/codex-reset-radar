@@ -33,15 +33,16 @@ jobs:
   build:
     needs: release-please
     if: needs.release-please.outputs.release_created == 'true'
-    # Same Xcode as local development, so release builds behave like the ones we test.
-    runs-on: xcode-27
+    # Latest stable image and Xcode on GitHub. Xcode 27's SwiftPM records the deployment target
+    # instead of the SDK in the binary, which puts the app in macOS 13 compatibility mode.
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
           ref: ${{ needs.release-please.outputs.tag_name }}
 
-      - name: Select Xcode 27.1
-        run: sudo xcode-select -s /Applications/Xcode_27.1.app
+      - name: Select Xcode 26.6
+        run: sudo xcode-select -s /Applications/Xcode_26.6.app
 
       - name: Check the version
         env:
