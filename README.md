@@ -12,6 +12,18 @@ Data from [codex-resets.com](https://codex-resets.com).
 
 ## Install
 
+With [Homebrew](https://brew.sh):
+
+```bash
+brew install --cask mpellicc/tap/codex-reset-radar
+```
+
+Then open the app and continue from step 3 below: Homebrew downloads count as from the internet too,
+so the first launch still needs "Open Anyway". `brew uninstall --zap codex-reset-radar` removes the app
+and its preferences.
+
+Or by hand:
+
 1. Download the [latest build](https://github.com/mpellicc/codex-reset-radar/releases/latest/download/CodexResetRadar.zip), unzip it and drag **Codex Reset Radar.app** to Applications.
 2. Open it. macOS will refuse because the app isn't from an identified developer.
 3. Go to **System Settings → Privacy & Security**, scroll down and click **Open Anyway** next to
@@ -75,7 +87,8 @@ Conventional Commit (a check enforces it):
 release-please keeps a Release PR open that collects everything merged since the last release:
 the next version, the `CHANGELOG.md` entry and the version in `Info.plist`. Merging it is the
 release: the workflow tags it, builds and signs the app, signs `CodexResetRadar.zip` for Sparkle,
-attaches it with `appcast.xml` and publishes the GitHub release. Installed apps find the update through
+attaches it with `appcast.xml`, publishes the GitHub release and bumps the version and `sha256` of
+the cask in [mpellicc/homebrew-tap](https://github.com/mpellicc/homebrew-tap). Installed apps find the update through
 `releases/latest/download/appcast.xml`.
 
 Update signing needs the EdDSA private key in the `SPARKLE_PRIVATE_KEY` repository secret; the job
@@ -88,6 +101,11 @@ it (for the secret or a backup), after any `swift build`:
 ```
 
 Never commit that file. Losing the key means every user has to install the next release by hand.
+
+The cask bump needs `HOMEBREW_TAP_TOKEN`: a fine-grained token with Contents read and write access to
+`mpellicc/homebrew-tap` only. Without it the release still publishes, but the job fails at the last step
+and Homebrew keeps offering the previous version. `scripts/setup-release-secrets.sh` walks through
+setting both secrets.
 
 ## License
 
