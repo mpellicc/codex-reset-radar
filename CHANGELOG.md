@@ -4,6 +4,14 @@ All notable changes to this project are documented here. The format follows
 [Conventional Commits](https://www.conventionalcommits.org/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.7.0](https://github.com/mpellicc/codex-reset-radar/compare/v0.6.3...v0.7.0) (2026-10-22)
+
+
+### Features
+
+* add logging with os.Logger ([#51](https://github.com/mpellicc/codex-reset-radar/issues/51)) ([1fad22d](https://github.com/mpellicc/codex-reset-radar/commit/1fad22dd1a2fc87065da57d02d7005635abf1eab))
+* turn announced, reminder and landed notifications on or off separately ([#50](https://github.com/mpellicc/codex-reset-radar/issues/50)) ([68b0d4d](https://github.com/mpellicc/codex-reset-radar/commit/68b0d4d23879234c48acd9665bd9aee5a8f84815))
+
 ## [0.6.3](https://github.com/mpellicc/codex-reset-radar/compare/v0.6.2...v0.6.3) (2026-10-22)
 
 
