@@ -40,23 +40,38 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
     private let center = UNUserNotificationCenter.current()
     private let tracker = AnnouncementTracker(store: UserDefaultsNotifiedStore())
     private let landings = LandingTracker(store: UserDefaultsLandedStore())
+    private let preferencesStore = UserDefaultsNotificationPreferencesStore()
+    private(set) var preferences: NotificationPreferences
+    /// The pending reset of the last poll, so a switch can re-sync the reminder without waiting for the next one.
+    private var lastScheduledReset: ScheduledReset?
 
     override init() {
+        preferences = preferencesStore.load()
         super.init()
+
         center.delegate = self
         // The center calls back on a background queue; @Sendable keeps the closure off the main actor,
         // or Swift 6 traps on the isolation check when it runs.
         center.requestAuthorization(options: [.alert, .sound]) { @Sendable _, _ in }
     }
 
+    /// Applies new notification switches right away. The reminder is the only kind with something
+    /// pending in the system, so it is re-synced here instead of at the next poll.
+    func update(_ preferences: NotificationPreferences) {
+        self.preferences = preferences
+        preferencesStore.save(preferences)
+        syncReminder(for: lastScheduledReset)
+    }
+
     func process(_ status: StatusData) {
+        lastScheduledReset = status.scheduledReset
         announceIfNew(status.scheduledReset)
         notifyIfLanded(status.latestReset)
         syncReminder(for: status.scheduledReset)
     }
 
     private func announceIfNew(_ reset: ScheduledReset?) {
-        guard let announcement = tracker.announcementIfNew(reset) else { return }
+        guard let announcement = preferences.allowing(tracker.announcementIfNew(reset)) else { return }
         let reset = announcement.reset
         let when = announcement.scheduledFor
 
@@ -76,7 +91,7 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
     }
 
     private func notifyIfLanded(_ latest: Reset?) {
-        guard let landed = landings.landedIfNew(latest) else { return }
+        guard let landed = preferences.allowing(landed: landings.landedIfNew(latest)) else { return }
 
         let content = UNMutableNotificationContent()
         content.title = "Codex \(landed.typeLabel.lowercased()) landed"
@@ -89,7 +104,7 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
     /// Keeps a single scheduled request in step with the pending reset. It is replaced when the
     /// time changes and removed once there is nothing to remind about (landed, called off, too close).
     private func syncReminder(for reset: ScheduledReset?) {
-        guard let reset, let reminder = Reminder.planned(for: reset, now: Date()) else {
+        guard let reset, let reminder = preferences.plannedReminder(for: reset, now: Date()) else {
             center.removePendingNotificationRequests(withIdentifiers: [Self.reminderID])
             return
         }

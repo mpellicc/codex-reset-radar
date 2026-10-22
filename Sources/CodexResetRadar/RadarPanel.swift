@@ -105,6 +105,7 @@ struct RadarPanel: View {
             }
             LaunchAtLoginToggle()
                 .disabled(isTranslocated)
+            NotificationSwitches()
             HStack {
                 Link("Data from codex-resets.com", destination: URL(string: "https://codex-resets.com")!)
                     .font(.caption)
@@ -202,6 +203,32 @@ private struct LaunchAtLoginToggle: View {
             failure = "Couldn't \(wanted ? "enable" : "disable") launch at login: \(error.localizedDescription)"
         }
         state = Self.currentState()
+    }
+}
+
+/// One checkbox per kind of notification, applied as soon as it is clicked.
+private struct NotificationSwitches: View {
+    @EnvironmentObject private var model: RadarModel
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Notify me about")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Toggle("Announced", isOn: binding(\.announced))
+            Toggle("Reminder", isOn: binding(\.reminder))
+            Toggle("Landed", isOn: binding(\.landed))
+        }
+    }
+
+    private func binding(_ kind: WritableKeyPath<NotificationPreferences, Bool>) -> Binding<Bool> {
+        Binding(
+            get: { model.notificationPreferences[keyPath: kind] },
+            set: { wanted in
+                var preferences = model.notificationPreferences
+                preferences[keyPath: kind] = wanted
+                model.setNotificationPreferences(preferences)
+            })
     }
 }
 
