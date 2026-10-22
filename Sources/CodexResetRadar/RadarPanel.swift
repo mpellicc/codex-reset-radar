@@ -54,7 +54,7 @@ struct RadarPanel: View {
                     Text(Format.when(when)).font(.title3.weight(.semibold))
                     Text(
                         when > model.now
-                            ? Format.relative(when, to: model.now)
+                            ? "in \(Format.spokenCountdown(to: when, from: model.now))"
                             : "Scheduled time passed, waiting for it to land"
                     )
                     .foregroundStyle(.secondary)
