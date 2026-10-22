@@ -151,6 +151,24 @@ private struct TranslocationWarning: View {
     }
 }
 
+/// A setting as macOS System Settings shows it: the label on the left, a switch on the right edge.
+private struct SwitchRow: View {
+    private let title: String
+    @Binding private var isOn: Bool
+
+    init(_ title: String, isOn: Binding<Bool>) {
+        self.title = title
+        _isOn = isOn
+    }
+
+    var body: some View {
+        Toggle(isOn: $isOn) {
+            Text(title).frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .toggleStyle(.switch)
+    }
+}
+
 private struct LaunchAtLoginToggle: View {
     @State private var state = Self.currentState()
     @State private var failure: String?
@@ -159,7 +177,7 @@ private struct LaunchAtLoginToggle: View {
         VStack(alignment: .leading, spacing: 4) {
             // The binding reads the service state, so a failed change has nothing to revert and
             // no change handler can call register/unregister a second time.
-            Toggle("Launch at login", isOn: Binding(get: { state.isOn }, set: { setEnabled($0) }))
+            SwitchRow("Launch at login", isOn: Binding(get: { state.isOn }, set: { setEnabled($0) }))
             if let hint = state.approvalHint {
                 Text(hint)
                     .font(.caption)
@@ -215,9 +233,9 @@ private struct NotificationSwitches: View {
             Text("Notify me about")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            Toggle("Announced", isOn: binding(\.announced))
-            Toggle("Reminder", isOn: binding(\.reminder))
-            Toggle("Landed", isOn: binding(\.landed))
+            SwitchRow("Announced", isOn: binding(\.announced))
+            SwitchRow("Reminder", isOn: binding(\.reminder))
+            SwitchRow("Landed", isOn: binding(\.landed))
         }
     }
 
