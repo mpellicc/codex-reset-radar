@@ -4,6 +4,21 @@ All notable changes to this project are documented here. The format follows
 [Conventional Commits](https://www.conventionalcommits.org/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.8.0](https://github.com/mpellicc/codex-reset-radar/compare/v0.7.0...v0.8.0) (2026-10-22)
+
+
+### Features
+
+* install with Homebrew from a personal tap ([#65](https://github.com/mpellicc/codex-reset-radar/issues/65)) ([94cec9a](https://github.com/mpellicc/codex-reset-radar/commit/94cec9a39b6d2e34fd0d4d59f3272e9b032b6c47))
+* localize the app into Italian ([#61](https://github.com/mpellicc/codex-reset-radar/issues/61)) ([74bbaf9](https://github.com/mpellicc/codex-reset-radar/commit/74bbaf91f9e948899adcd145c7deff51417762af))
+* update the app in place with Sparkle ([#64](https://github.com/mpellicc/codex-reset-radar/issues/64)) ([8769034](https://github.com/mpellicc/codex-reset-radar/commit/8769034aa0c1f77565fb139969df774862e9343b))
+
+
+### Bug Fixes
+
+* show settings as switches on the right, like System Settings ([#55](https://github.com/mpellicc/codex-reset-radar/issues/55)) ([13d7f55](https://github.com/mpellicc/codex-reset-radar/commit/13d7f55fac0421196e1b0b8e817ccd420256b41d))
+* show the panel countdown in hours and minutes, like the menu bar ([#62](https://github.com/mpellicc/codex-reset-radar/issues/62)) ([46607e3](https://github.com/mpellicc/codex-reset-radar/commit/46607e3d2f0ca4bcace9886b2ad9378736a62741))
+
 ## [0.7.0](https://github.com/mpellicc/codex-reset-radar/compare/v0.6.3...v0.7.0) (2026-10-22)
 
 
