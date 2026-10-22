@@ -37,23 +37,25 @@ To format the code before committing, run `swift format --in-place --recursive S
 
 ### Releasing
 
-Don't tag by hand or bump the version in `Resources/Info.plist`.
+The project follows [Semantic Versioning](https://semver.org/) and
+[Conventional Commits](https://www.conventionalcommits.org/), and releases with
+[release-please](https://github.com/googleapis/release-please). Don't tag by hand or edit the
+version in `Resources/Info.plist`.
 
-Every pull request needs one of these labels (a check enforces it). The highest bump among the
-pull requests in a release decides its version:
+Pull requests are squash-merged, and their title becomes the commit on `main`, so it must be a
+Conventional Commit (a check enforces it):
 
-| Label | Version bump |
-|---|---|
-| `breaking` | major |
-| `enhancement` | minor |
-| `bug`, `accessibility`, `documentation`, `maintenance` | patch |
+| Title | Example | Next version (before 1.0) |
+|---|---|---|
+| `feat:` | `feat: show the watch forecast` | minor |
+| `fix:` | `fix: keep the panel sized to its content` | patch |
+| `feat!:` or a `BREAKING CHANGE:` footer | `feat!: drop macOS 13` | minor (major after 1.0) |
+| `docs:`, `chore:`, `ci:`, `refactor:`, `test:`, `build:` | `ci: build on Xcode 27` | none on their own |
 
-On every merge to `main`, [Release Drafter](https://github.com/release-drafter/release-drafter)
-adds the pull request to a draft release and updates its next version, so one release can group
-many changes. To publish it, run the Release workflow (Actions → Release → Run workflow, or
-`gh workflow run release.yml`). It builds and signs the app with the draft's version, attaches
-`CodexResetRadar.zip` and publishes the release, which creates the `vX.Y.Z` tag. The release notes
-on GitHub are the changelog.
+release-please keeps a Release PR open that collects everything merged since the last release:
+the next version, the `CHANGELOG.md` entry and the version in `Info.plist`. Merging it is the
+release: the workflow tags it, builds and signs the app, attaches `CodexResetRadar.zip` and
+publishes the GitHub release.
 
 ## License
 
