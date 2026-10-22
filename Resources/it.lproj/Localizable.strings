@@ -34,9 +34,9 @@
 
 /* Reset types */
 "Reset" = "Reset";
-"Banked reset" = "Reset accantonato";
+"Banked reset" = "Credito di reimpostazione";
 "reset" = "reset";
-"banked reset" = "reset accantonato";
+"banked reset" = "credito di reimpostazione";
 
 /* Notifications */
 "Codex %@ announced" = "Codex: %@ annunciato";
