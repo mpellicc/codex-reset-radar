@@ -63,8 +63,8 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
         let content = UNMutableNotificationContent()
         content.title =
             announcement.kind == .announced
-            ? "Codex \(reset.typeLabel.lowercased()) announced"
-            : "Codex \(reset.typeLabel.lowercased()) rescheduled"
+            ? String(localized: "Codex \(reset.typeNoun) announced")
+            : String(localized: "Codex \(reset.typeNoun) rescheduled")
         content.subtitle = "\(Format.when(when)) · \(Format.relative(when))"
         content.body = reset.text
         content.sound = .default
@@ -79,8 +79,8 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
         guard let landed = landings.landedIfNew(latest) else { return }
 
         let content = UNMutableNotificationContent()
-        content.title = "Codex \(landed.typeLabel.lowercased()) landed"
-        content.body = "Your usage limits are back."
+        content.title = String(localized: "Codex \(landed.typeNoun) landed")
+        content.body = String(localized: "Your usage limits are back.")
         content.sound = .default
         content.userInfo = ["url": Self.homepage.absoluteString]
         center.add(UNNotificationRequest(identifier: "landed-\(landed.id)", content: content, trigger: nil))
@@ -95,7 +95,7 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
         }
 
         let content = UNMutableNotificationContent()
-        content.title = "Codex \(reset.typeLabel.lowercased()) in 15 minutes"
+        content.title = String(localized: "Codex \(reset.typeNoun) in 15 minutes")
         content.subtitle = Format.when(reminder.scheduledFor)
         content.body = reset.text
         content.sound = .default

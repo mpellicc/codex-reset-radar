@@ -54,8 +54,8 @@ struct RadarPanel: View {
                     Text(Format.when(when)).font(.title3.weight(.semibold))
                     Text(
                         when > model.now
-                            ? Format.relative(when, to: model.now)
-                            : "Scheduled time passed, waiting for it to land"
+                            ? "in \(Format.spokenCountdown(to: when, from: model.now))"
+                            : String(localized: "Scheduled time passed, waiting for it to land")
                     )
                     .foregroundStyle(.secondary)
                 } else {
@@ -72,7 +72,7 @@ struct RadarPanel: View {
             Label("No reset announced", systemImage: "moon.zzz")
                 .foregroundStyle(.secondary)
         } else {
-            Text(model.lastError == nil ? "Checking…" : "Couldn't reach codex-resets.com")
+            Text(model.lastError == nil ? LocalizedStringKey("Checking…") : "Couldn't reach codex-resets.com")
                 .foregroundStyle(.secondary)
         }
     }
@@ -140,8 +140,10 @@ private struct TranslocationWarning: View {
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.orange)
             Text(
-                "Quit, move Codex Reset Radar to Applications and open it from there. "
-                    + "Launch at login is disabled until then, because it would point at a path that disappears."
+                """
+                Quit, move Codex Reset Radar to Applications and open it from there. \
+                Launch at login is disabled until then, because it would point at a path that disappears.
+                """
             )
             .font(.caption)
             .foregroundStyle(.secondary)
@@ -199,7 +201,11 @@ private struct LaunchAtLoginToggle: View {
             }
             failure = nil
         } catch {
-            failure = "Couldn't \(wanted ? "enable" : "disable") launch at login: \(error.localizedDescription)"
+            let reason = error.localizedDescription
+            failure =
+                wanted
+                ? String(localized: "Couldn't enable launch at login: \(reason)")
+                : String(localized: "Couldn't disable launch at login: \(reason)")
         }
         state = Self.currentState()
     }

@@ -22,7 +22,7 @@ public struct LoginItemToggleState: Equatable, Sendable {
         case .requiresApproval:
             // Registered but switched off in System Settings. Staying on lets the user unregister it.
             isOn = true
-            approvalHint = "Approve Codex Reset Radar in System Settings → General → Login Items."
+            approvalHint = String(localized: "Approve Codex Reset Radar in System Settings → General → Login Items.")
         case .notRegistered, .notFound:
             isOn = false
             approvalHint = nil

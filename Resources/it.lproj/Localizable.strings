@@ -1,0 +1,71 @@
+/* Italian. Keys are the English text; a key left out shows in English. */
+
+/* Panel */
+"Check now" = "Controlla ora";
+"%@ announced" = "%@ annunciato";
+"Scheduled time passed, waiting for it to land" = "Orario previsto passato, in attesa che arrivi";
+"Time not given yet" = "Orario non ancora comunicato";
+"View post" = "Vedi il post";
+"No reset announced" = "Nessun reset annunciato";
+"Checking…" = "Controllo in corso…";
+"Couldn't reach codex-resets.com" = "Impossibile raggiungere codex-resets.com";
+"Last reset %@" = "Ultimo reset %@";
+"Every %.1f days on average" = "In media ogni %.1f giorni";
+"Checked %@" = "Controllato alle %@";
+"Data from codex-resets.com" = "Dati da codex-resets.com";
+"Quit" = "Esci";
+"Running from a temporary location" = "In esecuzione da una posizione temporanea";
+"Quit, move Codex Reset Radar to Applications and open it from there. Launch at login is disabled until then, because it would point at a path that disappears." = "Esci, sposta Codex Reset Radar in Applicazioni e riaprilo da lì. Fino ad allora l'apertura al login è disattivata, perché punterebbe a un percorso che scompare.";
+"Launch at login" = "Apri al login";
+"Open Login Items" = "Apri Elementi login";
+"Approve Codex Reset Radar in System Settings → General → Login Items." = "Approva Codex Reset Radar in Impostazioni di Sistema → Generali → Elementi login.";
+"Couldn't enable launch at login: %@" = "Impossibile attivare l'apertura al login: %@";
+"Couldn't disable launch at login: %@" = "Impossibile disattivare l'apertura al login: %@";
+"Notifications are off" = "Le notifiche sono disattivate";
+"You won't hear when a reset is announced or lands." = "Non saprai quando un reset viene annunciato o arriva.";
+"Open Notification Settings" = "Apri impostazioni Notifiche";
+"Version %@ available —" = "Versione %@ disponibile —";
+"Download" = "Scarica";
+
+/* Reset types */
+"Reset" = "Reset";
+"Banked reset" = "Reset accantonato";
+"reset" = "reset";
+"banked reset" = "reset accantonato";
+
+/* Notifications */
+"Codex %@ announced" = "Codex: %@ annunciato";
+"Codex %@ rescheduled" = "Codex: %@ riprogrammato";
+"Codex %@ landed" = "Codex: %@ arrivato";
+"Your usage limits are back." = "I tuoi limiti di utilizzo sono tornati.";
+"Codex %@ in 15 minutes" = "Codex: %@ tra 15 minuti";
+
+/* Menu bar countdown: 45m, 1h 59m, 9h, 3d, due */
+"due" = "ora";
+"%lldm" = "%lldm";
+"%lldh %lldm" = "%lldh %lldm";
+"%lldh" = "%lldh";
+"%lldd" = "%lldg";
+
+/* VoiceOver */
+"spoken-due" = "ora";
+"1 minute" = "1 minuto";
+"%lld minutes" = "%lld minuti";
+"1 hour" = "1 ora";
+"%lld hours" = "%lld ore";
+"%lld days" = "%lld giorni";
+"%@, offline, %@" = "%1$@, non in linea, %2$@";
+"%@, offline" = "%@, non in linea";
+"checking for resets" = "controllo dei reset in corso";
+"no reset announced" = "nessun reset annunciato";
+"reset announced, time not given yet" = "reset annunciato, orario non ancora comunicato";
+"reset due" = "reset atteso ora";
+"reset in %@" = "reset tra %@";
+
+/* Poll failures */
+"Rate limited, retrying at %@" = "Troppe richieste, nuovo tentativo alle %@";
+"codex-resets.com is having trouble" = "codex-resets.com ha dei problemi";
+"Request timed out" = "Richiesta scaduta";
+"You're offline" = "Sei offline";
+"Unexpected response from codex-resets.com" = "Risposta inattesa da codex-resets.com";
+"codex-resets.com returned HTTP %lld" = "codex-resets.com ha risposto HTTP %lld";

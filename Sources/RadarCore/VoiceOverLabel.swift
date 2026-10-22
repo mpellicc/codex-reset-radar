@@ -9,16 +9,16 @@ public enum VoiceOverLabel {
         if isOffline {
             // The countdown stays on screen next to the offline icon, so keep speaking it.
             let known = loaded && pending != nil
-            return known ? "\(name), offline, \(reset)" : "\(name), offline"
+            return known ? String(localized: "\(name), offline, \(reset)") : String(localized: "\(name), offline")
         }
         return "\(name), \(reset)"
     }
 
     private static func resetSummary(loaded: Bool, pending: ScheduledReset?, now: Date) -> String {
-        guard loaded else { return "checking for resets" }
-        guard let pending else { return "no reset announced" }
-        guard let when = pending.scheduledFor else { return "reset announced, time not given yet" }
-        guard when > now else { return "reset due" }
-        return "reset in \(Format.spokenCountdown(to: when, from: now))"
+        guard loaded else { return String(localized: "checking for resets") }
+        guard let pending else { return String(localized: "no reset announced") }
+        guard let when = pending.scheduledFor else { return String(localized: "reset announced, time not given yet") }
+        guard when > now else { return String(localized: "reset due") }
+        return String(localized: "reset in \(Format.spokenCountdown(to: when, from: now))")
     }
 }

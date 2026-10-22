@@ -18,6 +18,7 @@ cp "$BIN_DIR/$EXECUTABLE" "$APP/Contents/MacOS/$EXECUTABLE"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
 cp Resources/AppIcon.icns Resources/RadarMenuBarTemplate.png Resources/RadarMenuBarTemplate@2x.png \
     "$APP/Contents/Resources/"
+cp -R Resources/*.lproj "$APP/Contents/Resources/"
 
 codesign --force --sign - --timestamp=none "$APP"
 ditto -c -k --keepParent "$APP" "dist/$EXECUTABLE-$VERSION.zip"

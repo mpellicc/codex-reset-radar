@@ -56,20 +56,21 @@ public struct PollFailure: Equatable, Sendable {
             switch status {
             case 429:
                 let retryAt = pause ?? nextRegularPoll
-                message = "Rate limited, retrying at \(Format.clock(retryAt, locale: locale, timeZone: timeZone))"
+                let clock = Format.clock(retryAt, locale: locale, timeZone: timeZone)
+                message = String(localized: "Rate limited, retrying at \(clock)")
             case 500...599:
-                message = "codex-resets.com is having trouble"
+                message = String(localized: "codex-resets.com is having trouble")
             default:
                 message = error.localizedDescription
             }
         } else if let error = error as? URLError, error.code == .timedOut {
-            message = "Request timed out"
+            message = String(localized: "Request timed out")
             retryNotBefore = nil
         } else if let error = error as? URLError, Self.offlineCodes.contains(error.code) {
-            message = "You're offline"
+            message = String(localized: "You're offline")
             retryNotBefore = nil
         } else if error is DecodingError || (error as? URLError)?.code == .badServerResponse {
-            message = "Unexpected response from codex-resets.com"
+            message = String(localized: "Unexpected response from codex-resets.com")
             retryNotBefore = nil
         } else {
             message = error.localizedDescription

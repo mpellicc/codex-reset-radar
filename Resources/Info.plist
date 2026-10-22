@@ -6,6 +6,11 @@
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>Codex Reset Radar</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>it</string>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>CodexResetRadar</string>
 	<key>CFBundleIconFile</key>
