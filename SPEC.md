@@ -41,23 +41,34 @@ retried; a 429 without the header waits for the next regular poll. Errors are sh
 panel as short messages (offline, timeout, server trouble, rate limited with the retry time,
 unexpected response) and retried on the next poll; they never notify.
 
-**Notification.** Sent when `scheduled_reset` has a non-null `scheduled_for` in the
+**Notifications.** Announcements, landings and reminders use separate notification threads
+(`reset-announcements`, `reset-landings`, `reset-reminders`) for macOS automatic grouping.
+They also have separate request identifiers, so a landing never replaces its announcement.
+Reschedules stay in the announcement thread. The existing persisted announcement pairs and
+last seen landing id are reused across upgrades and relaunches; the grouping adds no new state.
+
+**Announcement notification.** "Codex reset announced" (or "Codex banked reset announced")
+is sent when `scheduled_reset` has a non-null `scheduled_for` in the
 future and either its `id` was never notified, or it was notified with a different
 `scheduled_for` (title then says "rescheduled"). Notified `id → scheduled_for` pairs
-are kept in `UserDefaults`, capped at 50. Clicking the notification opens the source post.
+are kept in `UserDefaults`, capped at 50. The subtitle explicitly says "Scheduled for" with the
+local date/time and relative time; the body contains the announcement text. It reports a plan,
+not a reset that has landed. Clicking the notification opens the source post.
 
 On first launch nothing has been notified yet, so if a dated reset is already pending the user
 gets its notification right away. This is intended: a colleague who installs the app
 mid-announcement should hear about it.
 
-A second notification, "Codex reset landed" (or "Codex banked reset landed"), is sent when
+**Landing notification.** "Codex reset landed" (or "Codex banked reset landed") is sent when
 `latest_reset.id` changes to a new id. That includes a surprise reset that was never announced.
 The last seen `latest_reset.id` is kept in `UserDefaults`, so it is sent once per id and survives
 relaunches. The first id ever seen is recorded without notifying: it is history, not news. A
 `scheduled_reset` that clears with no new `latest_reset` was called off and is dropped silently.
+The subtitle says "Reset confirmed" and the body says "The reset has landed. Your usage limits
+are back." Only a new latest reset confirms a landing; a passed scheduled time does not.
 Clicking the notification opens codex-resets.com, since `latest_reset` has no post URL.
 
-A reminder, "Codex reset in 15 minutes", is sent 15 minutes before the `scheduled_for` of a
+**Reminder notification.** "Codex reset in 15 minutes" is sent 15 minutes before the `scheduled_for` of a
 pending reset. The lead time is fixed. It is scheduled with the system (a calendar-triggered
 notification request) so it fires even if no poll happens near the time. A reschedule replaces it,
 so it fires once per `id` and `scheduled_for`. It is removed when the reset lands or is called off.

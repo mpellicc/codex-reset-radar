@@ -25,6 +25,8 @@ Requires macOS 13 or later.
 
 - Checks codex-resets.com every 15 minutes and after your Mac wakes.
 - When a reset with a date is announced, sends a notification (and another if the time changes).
+- Sends a distinct confirmation when a reset lands, including one that was never announced.
+- Separates announcements, landing confirmations and reminders in Notification Center's automatic grouping.
 - Shows a countdown next to the menu bar icon (`9h`, `1h 59m`, `45m`, `due`) until it lands.
 
 ## Build

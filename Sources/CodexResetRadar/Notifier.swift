@@ -34,9 +34,6 @@ private struct UserDefaultsLandedStore: LandedStore {
 /// and opens the source post (or codex-resets.com for a landed reset) on click.
 @MainActor
 final class Notifier: NSObject, UNUserNotificationCenterDelegate {
-    private static let homepage = URL(string: "https://codex-resets.com")!
-    private static let reminderID = "reset-reminder"
-
     private let center = UNUserNotificationCenter.current()
     private let tracker = AnnouncementTracker(store: UserDefaultsNotifiedStore())
     private let landings = LandingTracker(store: UserDefaultsLandedStore())
@@ -57,56 +54,40 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
 
     private func announceIfNew(_ reset: ScheduledReset?) {
         guard let announcement = tracker.announcementIfNew(reset) else { return }
-        let reset = announcement.reset
-        let when = announcement.scheduledFor
-
-        let content = UNMutableNotificationContent()
-        content.title =
-            announcement.kind == .announced
-            ? "Codex \(reset.typeLabel.lowercased()) announced"
-            : "Codex \(reset.typeLabel.lowercased()) rescheduled"
-        content.subtitle = "\(Format.when(when)) · \(Format.relative(when))"
-        content.body = reset.text
-        content.sound = .default
-        if let url = reset.source.url {
-            content.userInfo = ["url": url.absoluteString]
-        }
-        let stamp = Int(when.timeIntervalSince1970)
-        center.add(UNNotificationRequest(identifier: "reset-\(reset.id)-\(stamp)", content: content, trigger: nil))
+        send(.announcement(announcement))
     }
 
     private func notifyIfLanded(_ latest: Reset?) {
         guard let landed = landings.landedIfNew(latest) else { return }
-
-        let content = UNMutableNotificationContent()
-        content.title = "Codex \(landed.typeLabel.lowercased()) landed"
-        content.body = "Your usage limits are back."
-        content.sound = .default
-        content.userInfo = ["url": Self.homepage.absoluteString]
-        center.add(UNNotificationRequest(identifier: "landed-\(landed.id)", content: content, trigger: nil))
+        send(.landed(landed))
     }
 
     /// Keeps a single scheduled request in step with the pending reset. It is replaced when the
     /// time changes and removed once there is nothing to remind about (landed, called off, too close).
     private func syncReminder(for reset: ScheduledReset?) {
         guard let reset, let reminder = Reminder.planned(for: reset, now: Date()) else {
-            center.removePendingNotificationRequests(withIdentifiers: [Self.reminderID])
+            center.removePendingNotificationRequests(withIdentifiers: [ResetNotification.reminderID])
             return
         }
 
-        let content = UNMutableNotificationContent()
-        content.title = "Codex \(reset.typeLabel.lowercased()) in 15 minutes"
-        content.subtitle = Format.when(reminder.scheduledFor)
-        content.body = reset.text
-        content.sound = .default
-        if let url = reset.source.url {
-            content.userInfo = ["url": url.absoluteString]
-        }
         // A calendar trigger holds an absolute time, so it still fires on schedule after the Mac sleeps.
         let fields: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute, .second]
         let trigger = UNCalendarNotificationTrigger(
             dateMatching: Calendar.current.dateComponents(fields, from: reminder.fireDate), repeats: false)
-        center.add(UNNotificationRequest(identifier: Self.reminderID, content: content, trigger: trigger))
+        send(.reminder(reset, reminder), trigger: trigger)
+    }
+
+    private func send(_ notification: ResetNotification, trigger: UNNotificationTrigger? = nil) {
+        let content = UNMutableNotificationContent()
+        content.title = notification.title
+        content.subtitle = notification.subtitle()
+        content.body = notification.body
+        content.threadIdentifier = notification.threadIdentifier
+        content.sound = .default
+        if let url = notification.url {
+            content.userInfo = ["url": url.absoluteString]
+        }
+        center.add(UNNotificationRequest(identifier: notification.identifier, content: content, trigger: trigger))
     }
 
     // The center calls its delegate on a background queue, so these hop to the main actor where needed.

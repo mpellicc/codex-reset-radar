@@ -52,6 +52,15 @@ final class AnnouncementTrackerTests: XCTestCase {
         XCTAssertEqual(announcement.kind, .announced)
     }
 
+    func testRelaunchDoesNotRepeatAnAnnouncementButStillReportsAReschedule() throws {
+        XCTAssertEqual(tracker.announcementIfNew(reset(in: 3600), now: now)?.kind, .announced)
+        let relaunched = AnnouncementTracker(store: store)
+        XCTAssertNil(relaunched.announcementIfNew(reset(in: 3600), now: now))
+        let rescheduled = try XCTUnwrap(relaunched.announcementIfNew(reset(in: 7200), now: now))
+        XCTAssertEqual(rescheduled.kind, .rescheduled)
+        XCTAssertNil(AnnouncementTracker(store: store).announcementIfNew(reset(in: 7200), now: now))
+    }
+
     func testNothingToAnnounce() {
         XCTAssertNil(tracker.announcementIfNew(nil, now: now))
         XCTAssertNil(tracker.announcementIfNew(reset(in: nil), now: now))
