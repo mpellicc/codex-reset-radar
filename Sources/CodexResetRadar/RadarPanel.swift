@@ -33,7 +33,7 @@ struct RadarPanel: View {
             Text("Codex Reset Radar").font(.headline)
             Spacer()
             Button {
-                model.refresh()
+                model.refresh(.manual)
             } label: {
                 Image(systemName: "arrow.clockwise")
             }
