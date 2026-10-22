@@ -4,7 +4,7 @@ import SwiftUI
 
 struct RadarPanel: View {
     @EnvironmentObject private var model: RadarModel
-    @EnvironmentObject private var updates: UpdateChecker
+    @EnvironmentObject private var updater: Updater
 
     private let isTranslocated = Translocation.isTranslocated(bundleURL: Bundle.main.bundleURL)
 
@@ -16,7 +16,6 @@ struct RadarPanel: View {
             announcement
             Divider()
             history
-            UpdateAvailableRow(updates: updates)
             Divider()
             footer
         }
@@ -106,9 +105,12 @@ struct RadarPanel: View {
             LaunchAtLoginToggle()
                 .disabled(isTranslocated)
             NotificationSwitches()
+            Link("Data from codex-resets.com", destination: URL(string: "https://codex-resets.com")!)
+                .font(.caption)
+            // Its own row: next to the link, the buttons overflow the panel width, above all in Italian.
             HStack {
-                Link("Data from codex-resets.com", destination: URL(string: "https://codex-resets.com")!)
-                    .font(.caption)
+                Button("Check for Updates…") { updater.checkForUpdates() }
+                    .disabled(!updater.canCheckForUpdates)
                 Spacer()
                 Button("Quit") { NSApplication.shared.terminate(nil) }
                     .keyboardShortcut("q")

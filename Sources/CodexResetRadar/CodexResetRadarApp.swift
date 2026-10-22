@@ -4,13 +4,13 @@ import SwiftUI
 @main
 struct CodexResetRadarApp: App {
     @StateObject private var model = RadarModel()
-    @StateObject private var updates = UpdateChecker()
+    @StateObject private var updater = Updater()
 
     var body: some Scene {
         MenuBarExtra {
             RadarPanel()
                 .environmentObject(model)
-                .environmentObject(updates)
+                .environmentObject(updater)
         } label: {
             MenuBarLabel(model: model)
         }

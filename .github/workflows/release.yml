@@ -58,14 +58,27 @@ jobs:
       - name: Build, sign and zip
         run: scripts/build-app.sh
 
-      - name: Publish the release
+      - name: Sign the update and write the appcast
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
           TAG: ${{ needs.release-please.outputs.tag_name }}
           VERSION: ${{ needs.release-please.outputs.version }}
         run: |
           # One unversioned zip per release keeps releases/latest/download/CodexResetRadar.zip stable.
           mv "dist/CodexResetRadar-$VERSION.zip" dist/CodexResetRadar.zip
-          gh release upload "$TAG" dist/CodexResetRadar.zip --clobber
+          # The release body is the CHANGELOG.md entry release-please wrote; Sparkle shows it as the notes.
+          gh release view "$TAG" --json body --jq .body > "$RUNNER_TEMP/notes.md"
+          scripts/make-appcast.sh "$TAG" "$RUNNER_TEMP/notes.md"
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.release-please.outputs.tag_name }}
+        run: |
+          # Installed apps read releases/latest/download/appcast.xml, so the appcast must be attached
+          # before the release becomes the latest.
+          gh release upload "$TAG" dist/CodexResetRadar.zip dist/appcast.xml --clobber
           gh release edit "$TAG" --draft=false --latest

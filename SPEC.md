@@ -24,12 +24,13 @@ Fields used:
 
 Terms: the data must be credited with a link to codex-resets.com wherever it is shown.
 
-**Update check.** On launch and then once a day the app asks
-`GET https://api.github.com/repos/mpellicc/codex-reset-radar/releases/latest` for the newest
-release. Its `tag_name` (without the leading `v`) is compared with the app's
-`CFBundleShortVersionString` as `MAJOR.MINOR.PATCH`. Versions that don't have that shape, such as
-`dev` when run outside the `.app` or a prerelease suffix, never offer an update. A failed check
-is silent. It never notifies, downloads or installs anything.
+**Updates.** [Sparkle](https://sparkle-project.org) reads the appcast at
+`https://github.com/mpellicc/codex-reset-radar/releases/latest/download/appcast.xml` once a day in the
+background and when the user clicks "Check for Updates…". A newer build (by `CFBundleVersion`) is offered
+in Sparkle's standard window with its release notes; installing it replaces the app in place and
+relaunches it. Updates must carry a valid EdDSA signature for the `SUPublicEDKey` in `Info.plist`.
+Run outside the `.app` (`swift run`) there is no feed, so the updater doesn't start.
+See [ADR 0001](docs/adr/0001-update-in-place-with-sparkle.md).
 
 ## Behaviour
 
@@ -91,11 +92,9 @@ poll; the countdown stays next to it. VoiceOver reads the item as a sentence, fo
 - Otherwise: "No reset announced".
 - Last reset (relative) and average interval.
 - Last checked time, error if the last poll failed.
-- When the update check found a newer release: "Version X available — Download", linking to
-  the release page.
 - Launch at login toggle, then under a small "Notify me about" heading three checkboxes:
   Announced, Reminder, Landed (see Notification switches), then the "Data from codex-resets.com"
-  link and Quit.
+  link, and "Check for Updates…" with Quit.
 - The toggle reads the login item status every time the panel opens. A failed change
   leaves the toggle at the real status and shows the error under it. When the item needs
   approval, the toggle stays on and a hint with a button opens System Settings → General → Login Items.
@@ -105,12 +104,13 @@ poll; the countdown stays next to it. VoiceOver reads the item as a sentence, fo
 
 ## Tech
 
-- Swift + SwiftUI `MenuBarExtra`, macOS 13+, Swift Package with no dependencies.
+- Swift + SwiftUI `MenuBarExtra`, macOS 13+, Swift Package. Sparkle is its only dependency.
 - `LSUIElement` (no Dock icon), `UserNotifications`, `SMAppService` for login item.
-- `scripts/build-app.sh` builds a universal binary, assembles the `.app`,
-  ad-hoc signs it and zips it into `dist/`.
+- `scripts/build-app.sh` builds a universal binary, assembles the `.app` with `Sparkle.framework`
+  in `Contents/Frameworks`, ad-hoc signs it and zips it into `dist/`.
+- `scripts/make-appcast.sh` signs the zip with the EdDSA private key and writes `dist/appcast.xml`;
+  the release job attaches both to the GitHub release.
 
 ## Out of scope for v1
 
-Watch forecast, Slack, installing updates (the app only checks for them), settings beyond
-launch at login and the notification switches.
+Watch forecast, Slack, settings beyond launch at login and the notification switches.

@@ -21,6 +21,10 @@ Data from [codex-resets.com](https://codex-resets.com).
 
 Requires macOS 13 or later.
 
+The app keeps itself up to date: it checks once a day, or when you click **Check for Updates…** in the
+panel, and installs new versions in place without another "Open Anyway". Versions 0.7.0 and older
+can't do this, so update from those once by hand.
+
 ## What it does
 
 - Checks codex-resets.com every 15 minutes and after your Mac wakes.
@@ -70,8 +74,20 @@ Conventional Commit (a check enforces it):
 
 release-please keeps a Release PR open that collects everything merged since the last release:
 the next version, the `CHANGELOG.md` entry and the version in `Info.plist`. Merging it is the
-release: the workflow tags it, builds and signs the app, attaches `CodexResetRadar.zip` and
-publishes the GitHub release.
+release: the workflow tags it, builds and signs the app, signs `CodexResetRadar.zip` for Sparkle,
+attaches it with `appcast.xml` and publishes the GitHub release. Installed apps find the update through
+`releases/latest/download/appcast.xml`.
+
+Update signing needs the EdDSA private key in the `SPARKLE_PRIVATE_KEY` repository secret; the job
+fails without it, or when it doesn't match `SUPublicEDKey` in `Info.plist`. The key was made with
+Sparkle's `generate_keys --account codex-reset-radar` and is kept in its owner's login Keychain. To export
+it (for the secret or a backup), after any `swift build`:
+
+```bash
+.build/artifacts/sparkle/Sparkle/bin/generate_keys --account codex-reset-radar -x sparkle-private-key.txt
+```
+
+Never commit that file. Losing the key means every user has to install the next release by hand.
 
 ## License
 

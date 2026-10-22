@@ -15,6 +15,7 @@
 "Checked %@" = "Controllato alle %@";
 "Data from codex-resets.com" = "Dati da codex-resets.com";
 "Quit" = "Esci";
+"Check for Updates…" = "Controlla aggiornamenti…";
 "Running from a temporary location" = "In esecuzione da una posizione temporanea";
 "Quit, move Codex Reset Radar to Applications and open it from there. Launch at login is disabled until then, because it would point at a path that disappears." = "Esci, sposta Codex Reset Radar in Applicazioni e riaprilo da lì. Fino ad allora l'apertura al login è disattivata, perché punterebbe a un percorso che scompare.";
 "Launch at login" = "Apri al login";
@@ -25,8 +26,6 @@
 "Notifications are off" = "Le notifiche sono disattivate";
 "You won't hear when a reset is announced or lands." = "Non saprai quando un reset viene annunciato o arriva.";
 "Open Notification Settings" = "Apri impostazioni Notifiche";
-"Version %@ available —" = "Versione %@ disponibile —";
-"Download" = "Scarica";
 "Notify me about" = "Avvisami per";
 "Announced" = "Annuncio";
 "Reminder" = "Promemoria";
