@@ -2,6 +2,9 @@
 
 # Codex Reset Radar
 
+[![Latest release](https://img.shields.io/github/v/release/mpellicc/codex-reset-radar?label=release)](https://github.com/mpellicc/codex-reset-radar/releases/latest)
+[![CI](https://github.com/mpellicc/codex-reset-radar/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mpellicc/codex-reset-radar/actions/workflows/ci.yml)
+
 A tiny macOS menu bar app that pings you when a Codex usage reset is announced,
 with a countdown to when it lands.
 
