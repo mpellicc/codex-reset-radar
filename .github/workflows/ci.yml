@@ -38,3 +38,5 @@ jobs:
             exit 1
           fi
           kill "$pid"
+      - name: Test release signing and appcast generation
+        run: scripts/test-appcast.sh
