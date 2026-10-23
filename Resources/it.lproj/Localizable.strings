@@ -30,6 +30,8 @@
 "Announced" = "Annuncio";
 "Reminder" = "Promemoria";
 "Landed" = "Arrivo";
+"Reminder lead time" = "Anticipo del promemoria";
+"%lld min" = "%lld min";
 
 /* Panel: watch forecast */
 "Forecast" = "Previsione";
@@ -50,7 +52,7 @@
 "Codex %@ rescheduled" = "Codex: %@ riprogrammato";
 "Codex %@ landed" = "Codex: %@ arrivato";
 "Your usage limits are back." = "I tuoi limiti di utilizzo sono tornati.";
-"Codex %@ in 15 minutes" = "Codex: %@ tra 15 minuti";
+"Codex %@ in %lld minutes" = "Codex: %@ tra %lld minuti";
 
 /* Menu bar countdown: 45m, 1h 59m, 9h, 3d, due */
 "due" = "ora";
