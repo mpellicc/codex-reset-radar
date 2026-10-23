@@ -47,7 +47,7 @@ can't do this, so update from those once by hand.
 - Shows the source's AI watch forecast when no reset is announced and the forecast hasn't expired. Forecasts never send notifications or change the menu bar countdown.
 - Lets you turn announced, reminder and landed notifications on or off separately, from the panel, and choose how long before a reset the reminder comes (5, 15, 30 or 60 minutes; 15 by default).
 - Notification sound follows macOS: use the per-app "Play sound for notifications" switch in System Settings → Notifications → Codex Reset Radar (the panel's "Open Notification Settings" button takes you there).
-- Speaks your macOS language (English or Italian so far); announcement posts and forecast text stay in their original wording.
+- Speaks your macOS language: English, Italian, Spanish, French, German or Simplified Chinese, falling back to English. Dates and times follow the same language; announcement posts and forecast text stay in their original wording.
 
 On first launch, an already-announced reset with a future date sends a notification right away.
 The latest reset that already landed is treated as history and doesn't notify.
@@ -56,7 +56,8 @@ The latest reset that already landed is treated as history and doesn't notify.
 
 In Shortcuts, add **Get Next Codex Reset** to get the pending reset's scheduled time (if given),
 type, announcement text and source URL. It returns nothing when no reset is announced.
-You can also ask Siri, "When is the next Codex reset in Codex Reset Radar?"
+You can also ask Siri, "When is the next Codex reset in Codex Reset Radar?", or the same question
+in any of the app's languages.
 
 The action uses the status the app already has, without making another network request.
 If the initial check hasn't finished, it waits up to 10 seconds; if no status is available,
@@ -90,14 +91,21 @@ Use the bundled app to try localization, the custom radar symbol, Shortcuts/Siri
 `swift run` doesn't include the bundle's resources or start the updater.
 See [SPEC.md](SPEC.md) for behaviour and [CHANGELOG.md](CHANGELOG.md) for release history.
 
-Build/typecheck and lint with the same commands as CI:
+Build/typecheck, lint and test with the same commands as CI:
 
 ```bash
 swift build
 swift format lint --strict --recursive Sources Tests
+swift test
 ```
 
-Run the core tests with `swift test`.
+CI also builds the bundle, checks that it stays running after launch, and runs
+`scripts/test-appcast.sh` to exercise release signing with throwaway keys (it needs
+`scripts/build-app.sh` first).
+
+To try a language, run the bundled app with
+`"dist/Codex Reset Radar.app/Contents/MacOS/CodexResetRadar" -AppleLanguages '(de)'`. To add or change
+text, follow [docs/agents/localization.md](docs/agents/localization.md).
 
 To format the code before committing, run `swift format --in-place --recursive Sources Tests`.
 
