@@ -4,6 +4,15 @@ All notable changes to this project are documented here. The format follows
 [Conventional Commits](https://www.conventionalcommits.org/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.10.0](https://github.com/mpellicc/codex-reset-radar/compare/v0.9.1...v0.10.0) (2026-10-23)
+
+
+### Features
+
+* add two easter eggs ([#83](https://github.com/mpellicc/codex-reset-radar/issues/83)) ([e5c404e](https://github.com/mpellicc/codex-reset-radar/commit/e5c404ed317c0bcc57e952c485cb269b1606787b))
+* animate the menu bar icon on events ([#87](https://github.com/mpellicc/codex-reset-radar/issues/87)) ([cc5e798](https://github.com/mpellicc/codex-reset-radar/commit/cc5e7981ddfa147e4382fb93179a77749c51cc2c))
+* draw the menu bar radar as a layered symbol ([#84](https://github.com/mpellicc/codex-reset-radar/issues/84)) ([dc86bcf](https://github.com/mpellicc/codex-reset-radar/commit/dc86bcf0db4961a79035555b23b02a45c0bcf221))
+
 ## [0.9.1](https://github.com/mpellicc/codex-reset-radar/compare/v0.9.0...v0.9.1) (2026-10-23)
 
 
