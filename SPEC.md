@@ -82,9 +82,21 @@ not at the next poll. The menu bar countdown and the panel's reset details are n
 
 **Menu bar.** Radar icon: a custom SF Symbol with its rings and needle on separate layers, matching
 the system's menu bar weight. When a dated reset is pending, the icon is followed by a
-countdown: `45m`, `1h 59m`, `9h`, `3d`, or `due` once the time has passed. After 2 consecutive failed
-polls (being offline counts) the icon becomes a slashed antenna, until the next successful
-poll; the countdown stays next to it. VoiceOver reads the item as a sentence, for example
+countdown: `45m`, `1h 59m`, `9h`, `3d`, in fixed-width digits so the item keeps its width. Once the
+scheduled time has passed, an hourglass replaces the countdown until the reset lands. After 2
+consecutive failed polls (being offline counts) the icon becomes a slashed antenna, until the next
+successful poll; the countdown or hourglass stays next to it.
+
+The icon moves on events only, never constantly:
+
+| When | Text | Animation |
+|---|---|---|
+| A poll starts (regular or manual) | unchanged | one eased sweep of the needle and the outer ring |
+| A dated reset is within the reminder lead time | countdown | the rings light up from the centre, slowly, repeating |
+| The scheduled time has passed | hourglass | the hourglass turns every few seconds |
+| A reset lands | none | one bounce |
+
+With Reduce Motion on nothing moves, and `Now` stands in for the hourglass. VoiceOver reads the item as a sentence, for example
 "Codex Reset Radar, reset in 9 hours", "…, reset due", "…, no reset announced" or "…, offline".
 Clicking the item opens the panel under it, on the display that was clicked; Escape, a click elsewhere
 or another click on the item closes it. The panel never takes focus from the app in front.
