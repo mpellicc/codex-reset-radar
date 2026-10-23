@@ -17,12 +17,12 @@
 "Quit" = "Beenden";
 "Check for Updates…" = "Nach Updates suchen …";
 "Running from a temporary location" = "Wird von einem temporären Ort ausgeführt";
-"Quit, move Codex Reset Radar to Applications and open it from there. Launch at login is disabled until then, because it would point at a path that disappears." = "Beende die App, bewege Codex Reset Radar in den Ordner „Programme“ und öffne die App dort. Bis dahin ist „Beim Anmelden öffnen“ deaktiviert, da es auf einen Pfad verweisen würde, der verschwindet.";
-"Launch at login" = "Beim Anmelden öffnen";
+"Quit, move Codex Reset Radar to Applications and open it from there. Launch at login is disabled until then, because it would point at a path that disappears." = "Beende die App, bewege Codex Reset Radar in den Ordner „Programme“ und öffne die App dort. Bis dahin ist „Bei der Anmeldung öffnen“ deaktiviert, da es auf einen Pfad verweisen würde, der verschwindet.";
+"Launch at login" = "Bei der Anmeldung öffnen";
 "Open Login Items" = "Anmeldeobjekte öffnen";
-"Approve Codex Reset Radar in System Settings → General → Login Items." = "Erlaube Codex Reset Radar in Systemeinstellungen → Allgemein → Anmeldeobjekte.";
-"Couldn't enable launch at login: %@" = "„Beim Anmelden öffnen“ konnte nicht aktiviert werden: %@";
-"Couldn't disable launch at login: %@" = "„Beim Anmelden öffnen“ konnte nicht deaktiviert werden: %@";
+"Approve Codex Reset Radar in System Settings → General → Login Items." = "Erlaube Codex Reset Radar in Systemeinstellungen → Allgemein → Anmeldeobjekte & Erweiterungen.";
+"Couldn't enable launch at login: %@" = "„Bei der Anmeldung öffnen“ konnte nicht aktiviert werden: %@";
+"Couldn't disable launch at login: %@" = "„Bei der Anmeldung öffnen“ konnte nicht deaktiviert werden: %@";
 "Notifications are off" = "Mitteilungen sind deaktiviert";
 "You won't hear when a reset is announced or lands." = "Du erfährst nicht, wenn ein Reset angekündigt wird oder eintrifft.";
 "Open Notification Settings" = "Mitteilungseinstellungen öffnen";
