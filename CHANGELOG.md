@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows
 [Conventional Commits](https://www.conventionalcommits.org/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.10.1](https://github.com/mpellicc/codex-reset-radar/compare/v0.10.0...v0.10.1) (2026-10-23)
+
+
+### Documentation
+
+* update README for current app features ([e6e4156](https://github.com/mpellicc/codex-reset-radar/commit/e6e415622eace203b2e0076d20cf6d8120cf2b5d))
+
 ## [0.10.0](https://github.com/mpellicc/codex-reset-radar/compare/v0.9.1...v0.10.0) (2026-10-23)
 
 
