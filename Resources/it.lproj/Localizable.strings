@@ -31,6 +31,14 @@
 "Reminder" = "Promemoria";
 "Landed" = "Arrivo";
 
+/* Panel: watch forecast */
+"Forecast" = "Previsione";
+"%@, %lld%% chance" = "%1$@, %2$lld%% di probabilità";
+"View source" = "Vedi la fonte";
+"AI guess, not an announcement" = "Stima dell'IA, non un annuncio";
+"Elevated" = "Elevata";
+"Strong" = "Forte";
+
 /* Reset types */
 "Reset" = "Reset";
 "Banked reset" = "Credito di reimpostazione";

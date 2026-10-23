@@ -5,6 +5,55 @@ public struct StatusData: Decodable, Sendable {
     public let latestReset: Reset?
     public let scheduledReset: ScheduledReset?
     public let stats: Stats
+    /// The watch forecast, if any. Decoded leniently: a missing, malformed or unknown-level watch reads as
+    /// none, so it can never fail the poll that carries the announcement.
+    public let activeWatch: Watch?
+
+    private enum CodingKeys: String, CodingKey {
+        case latestReset, scheduledReset, stats, activeWatch
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        latestReset = try container.decodeIfPresent(Reset.self, forKey: .latestReset)
+        scheduledReset = try container.decodeIfPresent(ScheduledReset.self, forKey: .scheduledReset)
+        stats = try container.decode(Stats.self, forKey: .stats)
+        do {
+            activeWatch = try container.decodeIfPresent(Watch.self, forKey: .activeWatch)
+        } catch {
+            Log.poll.error("active_watch ignored, it didn't decode: \(String(describing: error), privacy: .public)")
+            activeWatch = nil
+        }
+    }
+
+    /// The watch forecast the panel shows: none while a reset is pending (the announcement outranks a guess)
+    /// or once the forecast has expired.
+    public func visibleWatch(now: Date) -> Watch? {
+        guard scheduledReset == nil, let activeWatch, activeWatch.expiresAt > now else { return nil }
+        return activeWatch
+    }
+}
+
+/// The source's AI-generated guess that a reset may be coming, without an announcement.
+public struct Watch: Decodable, Sendable {
+    public enum Level: String, Decodable, Sendable {
+        case elevated, strong
+    }
+
+    public let level: Level
+    public let resetChancePercent: Int?
+    public let forecastWindow: String
+    public let observedAt: Date
+    public let expiresAt: Date
+    public let text: String
+    public let source: Source
+
+    public var levelLabel: String {
+        switch level {
+        case .elevated: return String(localized: "Elevated")
+        case .strong: return String(localized: "Strong")
+        }
+    }
 }
 
 public struct Reset: Decodable, Sendable {
