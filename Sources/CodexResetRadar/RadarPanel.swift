@@ -32,8 +32,7 @@ struct RadarPanel: View {
         // Report the content's exact height, so the panel window fits it instead of leaving blank strips.
         .fixedSize(horizontal: false, vertical: true)
         .tint(.signalBlue)
-        .modifier(NoFocusEffect())
-        // A button usually holds keyboard focus in the panel, and AppKit controls take key presses
+        // Once a button holds keyboard focus in the panel, AppKit controls take key presses
         // before `onKeyPress` would see them, so the panel's key events are watched directly.
         .onAppear(perform: watchForSecretWord)
         // The panel is hidden and shown again rather than rebuilt, so a half-typed word is
@@ -71,7 +70,7 @@ struct RadarPanel: View {
         HStack(spacing: 6) {
             // The menu bar's radar symbol: the needle and outer ring turn once for each sweep.
             MenuBarLabel.radar
-                .symbolEffect(.rotate.byLayer, value: sweeps)
+                .symbolEffect(.rotate.byLayer, options: .speed(1.4), value: sweeps)
                 .foregroundStyle(.secondary)
                 .accessibilityHidden(true)
             Text("Codex Reset Radar").font(.headline)
@@ -193,14 +192,6 @@ private struct SecretWord {
 
     mutating func reset() {
         matched = 0
-    }
-}
-
-/// The panel opens with keyboard focus on its first link, which then shows a focus ring
-/// as if it were selected. Clicking still works; only the ring goes.
-private struct NoFocusEffect: ViewModifier {
-    func body(content: Content) -> some View {
-        content.focusEffectDisabled()
     }
 }
 

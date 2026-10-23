@@ -46,7 +46,7 @@ final class MenuBarItem: NSObject {
 
     private func update() {
         label.layoutSubtreeIfNeeded()
-        item.length = label.fittingSize.width + 2 * Self.padding
+        item.length = max(NSStatusBar.system.thickness, label.fittingSize.width + 2 * Self.padding)
         item.button?.setAccessibilityLabel(
             VoiceOverLabel.menuBar(
                 loaded: model.status != nil, pending: model.pending, isOffline: model.isOffline, now: model.now))
@@ -72,8 +72,8 @@ final class MenuBarItem: NSObject {
             .offsetBy(dx: (clicked ?? window).frame.minX, dy: (clicked ?? window).frame.minY)
     }
 
-    /// Space on each side of the label, like the padding of a system menu bar item.
-    private static let padding: CGFloat = 4
+    /// Keep the countdown compact; icon-only items retain a square hit area.
+    private static let padding: CGFloat = 1
 }
 
 /// The radar, and the countdown while a dated reset is pending.
@@ -131,7 +131,7 @@ struct MenuBarLabel: View {
             Self.radar
         } else {
             Self.radar
-                .symbolEffect(.rotate.byLayer, value: sweeps)
+                .symbolEffect(.rotate.byLayer, options: .speed(1.4), value: sweeps)
                 .symbolEffect(.bounce, value: landings)
                 .symbolEffect(
                     .variableColor.iterative, options: .repeat(.continuous).speed(0.5), isActive: phase == .imminent)
@@ -173,6 +173,8 @@ final class MenuBarPanel: NSPanel {
         background.blendingMode = .behindWindow
         background.state = .active
         let host = NSHostingView(rootView: content)
+        // The title bar is hidden, so its safe area must not add a blank strip above the content.
+        host.safeAreaRegions = []
         // The window takes the content's exact size, and follows it when the content grows or shrinks.
         host.sizingOptions = [.minSize, .intrinsicContentSize, .maxSize]
         host.translatesAutoresizingMaskIntoConstraints = false
@@ -196,6 +198,9 @@ final class MenuBarPanel: NSPanel {
         self.anchor = anchor
         keepAnchored()
         makeKeyAndOrderFront(nil)
+        // Opening should not highlight the first link or restore a previously focused control.
+        // Tab navigation can still move focus into the controls deliberately.
+        makeFirstResponder(nil)
         outsideClicks = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) {
             [weak self] _ in
             Task { @MainActor in self?.close() }
