@@ -10,7 +10,12 @@ TAG=$1
 NOTES=$2
 ZIP=dist/CodexResetRadar.zip
 PLIST="dist/Codex Reset Radar.app/Contents/Info.plist"
-SPARKLE_BIN=.build/artifacts/sparkle/Sparkle/bin
+# Use the tools Xcode downloads under build-app.sh's DerivedData directory.
+SPARKLE_BIN=.build/xcode/SourcePackages/artifacts/sparkle/Sparkle/bin
+if [ ! -x "$SPARKLE_BIN/sign_update" ]; then
+    echo "Sparkle signing tool not found: $SPARKLE_BIN/sign_update. Run scripts/build-app.sh first." >&2
+    exit 1
+fi
 
 VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$PLIST")
 BUILD=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST")
