@@ -25,9 +25,16 @@ cp -R Resources/*.lproj "$APP/Contents/Resources/"
 
 # Shortcuts and Siri find the app's App Intents through Contents/Resources/Metadata.appintents.
 # Xcode extracts it at build time; SwiftPM doesn't, so run the same tool on what the compiler left behind.
-INTENTS_OBJECTS=".build/out/Intermediates.noindex/$EXECUTABLE.build/Release/$EXECUTABLE-p.build/Objects-normal/arm64"
+# The intermediates layout differs between Swift Build versions, so find the arm64 objects of the release build.
+INTENTS_OBJECTS=$(dirname "$(find .build -path "*Release*arm64*" -name "$EXECUTABLE.SwiftFileList" | head -1)")
+INTENTS_TMP=$(mktemp -d)
+find "$PWD/$INTENTS_OBJECTS" -name "*.swiftconstvalues" > "$INTENTS_TMP/ConstValuesList"
+if [ ! -s "$INTENTS_TMP/ConstValuesList" ]; then
+    echo "error: no .swiftconstvalues for $EXECUTABLE (looked in '$INTENTS_OBJECTS')" >&2
+    find .build -name "*.SwiftFileList" -o -name "*.swiftconstvalues" >&2
+    exit 1
+fi
 MIN_MACOS=$(/usr/libexec/PlistBuddy -c "Print LSMinimumSystemVersion" Resources/Info.plist)
-echo "$PWD/$INTENTS_OBJECTS/$EXECUTABLE-primary.swiftconstvalues" > "$INTENTS_OBJECTS/ConstValuesList"
 xcrun appintentsmetadataprocessor --quiet-warnings \
     --output "$APP/Contents/Resources" \
     --toolchain-dir "$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain" \
@@ -38,10 +45,9 @@ xcrun appintentsmetadataprocessor --quiet-warnings \
     --deployment-target "$MIN_MACOS" \
     --target-triple "arm64-apple-macos$MIN_MACOS" \
     --source-file-list "$INTENTS_OBJECTS/$EXECUTABLE.SwiftFileList" \
-    --swift-const-vals-list "$INTENTS_OBJECTS/ConstValuesList"
+    --swift-const-vals-list "$INTENTS_TMP/ConstValuesList"
 test -f "$APP/Contents/Resources/Metadata.appintents/extract.actionsdata"
 # Siri matches the App Shortcut phrases (it.lproj/AppShortcuts.strings for Italian) through these trained assets.
-INTENTS_TMP=$(mktemp -d)
 xcrun appintentsnltrainingprocessor --archive-ssu-assets \
     --extracted-metadata-path "$APP/Contents/Resources/Metadata.appintents" \
     --infoplist-path "$APP/Contents/Info.plist" \
