@@ -15,7 +15,17 @@ BIN_DIR=$(swift build "${BUILD_FLAGS[@]}" --show-bin-path)
 APP="dist/$APP_NAME.app"
 rm -rf dist
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources" "$APP/Contents/Frameworks"
-cp "$BIN_DIR/$EXECUTABLE" "$APP/Contents/MacOS/$EXECUTABLE"
+MIN_MACOS=$(/usr/libexec/PlistBuddy -c "Print LSMinimumSystemVersion" Resources/Info.plist)
+SDK_VERSION=$(xcrun --sdk macosx --show-sdk-version)
+# Swift Build records the deployment target as the SDK version, and macOS picks the app's look from that
+# number: anything below 26 gets the pre-Liquid Glass windows and controls. Write the SDK actually used.
+vtool -set-build-version macos "$MIN_MACOS" "$SDK_VERSION" -replace \
+    -output "$APP/Contents/MacOS/$EXECUTABLE" "$BIN_DIR/$EXECUTABLE"
+if vtool -show-build "$APP/Contents/MacOS/$EXECUTABLE" | awk '$1 == "sdk"' | grep -qv " $SDK_VERSION\$"; then
+    echo "error: $EXECUTABLE doesn't record SDK $SDK_VERSION" >&2
+    vtool -show-build "$APP/Contents/MacOS/$EXECUTABLE" >&2
+    exit 1
+fi
 # Sparkle arrives signed by its developers; ad-hoc signing the app below leaves that signature alone.
 ditto "$BIN_DIR/Sparkle.framework" "$APP/Contents/Frameworks/Sparkle.framework"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
@@ -34,7 +44,6 @@ if [ ! -s "$INTENTS_TMP/ConstValuesList" ]; then
     find .build -name "*.SwiftFileList" -o -name "*.swiftconstvalues" >&2
     exit 1
 fi
-MIN_MACOS=$(/usr/libexec/PlistBuddy -c "Print LSMinimumSystemVersion" Resources/Info.plist)
 xcrun appintentsmetadataprocessor --quiet-warnings \
     --output "$APP/Contents/Resources" \
     --toolchain-dir "$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain" \
