@@ -10,9 +10,9 @@ to move on their own: the needle sweeping, the rings lighting from the centre. A
 hosts a real view runs them, on every display.
 
 The symbol is a variable template (Ultralight, Regular and Black) drawn by
-`scripts/menu-bar-symbol.py`, which writes the layers and their annotations: the needle and the aura
-that opens the outer ring around its blip rotate together around the radar's centre, and the dot and
-rings carry variable-colour thresholds from the centre out. `scripts/build-app.sh` compiles the
+`scripts/menu-bar-symbol.py`, which writes the layers and their annotations: the needle and the outer
+ring, which is open around the needle's blip, rotate together around the radar's centre, so the opening
+reads as the blip's halo; the dot and rings carry variable-colour thresholds from the centre out. `scripts/build-app.sh` compiles the
 catalog with `actool`, as Xcode would.
 
 ## Consequences

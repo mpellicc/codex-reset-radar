@@ -7,11 +7,10 @@ The template has Ultralight, Regular and Black at small scale; the system interp
 weight and scale. Each layer keeps the same path structure in every weight, which interpolation needs.
 
 Layers, bottom to top:
-  0-2  outer ring, inner ring, centre dot: variable colour lights them from the centre out.
-  3    aura around the blip: clears what is under it, so the rings open around the blip.
-  4    needle and blip.
-The aura and the needle rotate together around the radar's centre (the rotate anchor), so the opening
-in the rings follows the needle. scripts/build-app.sh compiles the catalog; the SF Symbols app opens
+  0-2  centre dot, inner ring, outer ring: variable colour lights them from the centre out.
+  3    needle and blip.
+The outer ring is open around the blip. It rotates with the needle around the radar's centre (the
+rotate anchor), so the opening stays around the blip and reads as the blip's own halo. scripts/build-app.sh compiles the catalog; the SF Symbols app opens
 the SVG for a preview.
 """
 import math
@@ -19,17 +18,19 @@ import sys
 
 K = 100/34.0             # template units per px of the original 36 px (@2x) menu bar glyph
 CY = -35.23              # optical centre on the cap-height midpoint
-R_OUT, R_IN = 14*K, 8.5*K
+R_OUT = 14*K             # centre line of the outer ring
 ANG = math.radians(45)   # needle points up and to the right
-BLIP_D = 16*K
-AURA = 1.1*K             # clearance the blip cuts around itself in the rings
+BLIP_D = 16*K            # blip centre, just outside the outer ring
+CLEARANCE = 1.1*K        # space between the blip and the ends of the outer ring
 WEIGHTS = {              # name: (column centre x, stroke multiplier)
     "Ultralight": (559.711, 0.45),
-    "Regular": (1449.84, 1.08),
-    "Black": (2933.4, 1.6),
+    "Regular": (1449.84, 1.0),
+    "Black": (2933.4, 1.4),
 }
 
+
 def f(v): return f"{v:.4f}".rstrip("0").rstrip(".")
+
 
 def circle(cx, cy, r, ccw=False):
     # Four cubic quarter-circles. SVG arcs get split into a varying number of curves once their
@@ -46,8 +47,39 @@ def circle(cx, cy, r, ccw=False):
         d += f"C{f(a[0])} {f(a[1])} {f(b[0])} {f(b[1])} {f(c[0])} {f(c[1])}"
     return d + "Z"
 
+
 def ring(r, w):
     return circle(0, CY, r+w/2) + circle(0, CY, r-w/2, ccw=True)
+
+
+def arc_points(r, a0, a1, n):
+    """Cubic segments of the arc from angle a0 to a1 (radians, counter-clockwise, y up), always n of them."""
+    def P(a): return (r*math.cos(a), CY - r*math.sin(a))
+    def T(a): return (-math.sin(a), -math.cos(a))   # tangent, in y-down coordinates
+    step = (a1-a0)/n
+    k = 4/3*math.tan(step/4)*r
+    segs = []
+    for i in range(n):
+        s0, s1 = a0 + i*step, a0 + (i+1)*step
+        p0, p1 = P(s0), P(s1)
+        t0, t1 = T(s0), T(s1)
+        segs.append(((p0[0]+k*t0[0], p0[1]+k*t0[1]), (p1[0]-k*t1[0], p1[1]-k*t1[1]), p1))
+    return P(a0), segs
+
+
+def gapped_ring(r, w, gap):
+    """The ring with an opening of half-angle `gap` around the needle's direction."""
+    a0, a1 = ANG + gap, ANG - gap + 2*math.pi
+    start, outer = arc_points(r + w/2, a0, a1, 4)
+    end, inner = arc_points(r - w/2, a1, a0, 4)
+    d = f"M{f(start[0])} {f(start[1])}"
+    for (a, b, c) in outer:
+        d += f"C{f(a[0])} {f(a[1])} {f(b[0])} {f(b[1])} {f(c[0])} {f(c[1])}"
+    d += f"L{f(end[0])} {f(end[1])}"
+    for (a, b, c) in inner:
+        d += f"C{f(a[0])} {f(a[1])} {f(b[0])} {f(b[1])} {f(c[0])} {f(c[1])}"
+    return d + "Z"
+
 
 def needle(w, blip_r):
     dx, dy = math.cos(ANG), -math.sin(ANG)
@@ -56,32 +88,45 @@ def needle(w, blip_r):
     L = BLIP_D
     pts = [(nx*h, CY+ny*h), (dx*L+nx*h, CY+dy*L+ny*h), (dx*L-nx*h, CY+dy*L-ny*h), (-nx*h, CY-ny*h)]
     # Same winding as circle() (clockwise on screen), so overlaps add up instead of cancelling.
-    area = sum(x0*y1-x1*y0 for (x0,y0),(x1,y1) in zip(pts, pts[1:]+pts[:1]))
-    if area < 0: pts = pts[::-1]
-    d = "M" + "L".join(f"{f(x)} {f(y)}" for x,y in pts) + "Z"
+    area = sum(x0*y1-x1*y0 for (x0, y0), (x1, y1) in zip(pts, pts[1:]+pts[:1]))
+    if area < 0:
+        pts = pts[::-1]
+    d = "M" + "L".join(f"{f(x)} {f(y)}" for x, y in pts) + "Z"
     return d + circle(dx*L, CY+dy*L, blip_r)
 
+
+def stroke(m): return 3.0*K*m
+
+
 def layers(m):
-    # Later paths draw on top. The aura clears what is drawn before it, so the rings open around
-    # the blip wherever the needle points, and the opening turns with the needle.
-    w = 2.4*K*m
+    # Later paths draw on top. Dot, inner ring and outer ring are equally spaced: the gaps between
+    # them match, and the outer ring keeps its size in every weight.
+    w = stroke(m)
+    dot = (2.5 + 1.0*m)*K
+    gap = (R_OUT - dot - 1.5*w) / 2
+    r_in = dot + gap + w/2
     blip_r = (2.7 + 0.8*m)*K
-    bx, by = math.cos(ANG)*BLIP_D, CY - math.sin(ANG)*BLIP_D
+    # The opening in the outer ring keeps CLEARANCE between the blip and the ring's ends.
+    reach = blip_r + CLEARANCE + w/2
+    cos_half = (BLIP_D**2 + R_OUT**2 - reach**2) / (2*BLIP_D*R_OUT)
+    half = math.acos(max(-1.0, min(1.0, cos_half)))
     return [
-        ring(R_OUT, w),                                     # 0 outer ring
-        ring(R_IN, w),                                      # 1 inner ring
-        circle(0, CY, (2.2 + 0.8*m)*K),                     # 2 centre dot
-        circle(bx, by, blip_r + AURA),                      # 3 aura around the blip
-        needle(2.0*K*m, blip_r),                            # 4 needle with its blip
+        circle(0, CY, dot),                                 # 0 centre dot
+        ring(r_in, w),                                      # 1 inner ring
+        gapped_ring(R_OUT, w, half),                        # 2 outer ring, open around the blip
+        needle(2.2*K*m, blip_r),                            # 3 needle with its blip
     ]
 
-HALF = lambda m: R_OUT + 2.4*K*m/2 + 3*K   # ring plus the blip overhang
+
+def HALF(m): return R_OUT + stroke(m)/2 + 3*K   # ring plus the blip overhang
+
+
+# The outer ring turns with the needle, so its opening stays around the blip.
 style = {
-    0: "-sfsymbols-variable-threshold:0.68;-sfsymbols-motion-group:1",
+    0: "-sfsymbols-variable-threshold:0.0;-sfsymbols-motion-group:1",
     1: "-sfsymbols-variable-threshold:0.34;-sfsymbols-motion-group:1",
-    2: "-sfsymbols-variable-threshold:0.0;-sfsymbols-motion-group:1",
-    3: "opacity:0.0;-sfsymbols-clear-behind:true;-sfsymbols-motion-group:0;-sfsymbols-always-rotates:true",
-    4: "-sfsymbols-motion-group:0;-sfsymbols-always-rotates:true",
+    2: "-sfsymbols-variable-threshold:0.68;-sfsymbols-motion-group:0;-sfsymbols-always-rotates:true",
+    3: "-sfsymbols-motion-group:0;-sfsymbols-always-rotates:true",
 }
 css = ".defaults {-sfsymbols-rotates-clockwise:true}\n\n"
 css += "\n".join(f".monochrome-{i} {{{s}}}" for i,s in style.items()) + "\n\n"
