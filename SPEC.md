@@ -65,7 +65,7 @@ value reads as 15) and is chosen from a picker on the Reminder row. Changing it 
 reminder at once, like toggling Reminder. It is scheduled with the system (a calendar-triggered
 notification request) so it fires even if no poll happens near the time. A reschedule replaces it,
 so it fires once per `id` and `scheduled_for`. It is removed when the reset lands or is called off.
-It is skipped when the reset is announced less than the lead time ahead: the announcement covers it.
+It is skipped when the reset is announced at or inside the lead time: the announcement covers it.
 Clicking the reminder opens the source post.
 
 **Notification switches.** Each kind can be turned off on its own: **Announced** ("reset announced"

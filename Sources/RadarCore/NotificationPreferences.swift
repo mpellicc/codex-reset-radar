@@ -7,25 +7,23 @@ import Foundation
 public struct NotificationPreferences: Equatable, Sendable {
     /// "Reset announced" and "rescheduled".
     public var announced: Bool
-    /// "Reset in N minutes", N being `reminderLeadMinutes`.
+    /// "Reset in N minutes", N being `reminderLeadTime`.
     public var reminder: Bool
     /// "Reset landed".
     public var landed: Bool
-    /// How many minutes before the reset the reminder fires. One of `Reminder.leadMinuteChoices`.
-    public var reminderLeadMinutes: Int
+    /// How long before the reset the reminder fires. Anything that needs to know when a reset is
+    /// "close" reads it here (the reminder itself, and later the menu bar).
+    public var reminderLeadTime: ReminderLeadTime
 
     public init(
         announced: Bool = true, reminder: Bool = true, landed: Bool = true,
-        reminderLeadMinutes: Int = Reminder.defaultLeadMinutes
+        reminderLeadTime: ReminderLeadTime = .fifteenMinutes
     ) {
         self.announced = announced
         self.reminder = reminder
         self.landed = landed
-        self.reminderLeadMinutes = reminderLeadMinutes
+        self.reminderLeadTime = reminderLeadTime
     }
-
-    /// The reminder lead time, for anything that needs to know when a reset is "close" (the reminder itself, and later the menu bar).
-    public var reminderLeadTime: TimeInterval { TimeInterval(reminderLeadMinutes * 60) }
 
     /// The announcement to send, or nil when announcements are switched off.
     /// Call it with what the tracker returned, after the tracker has recorded it.
@@ -63,20 +61,20 @@ public struct UserDefaultsNotificationPreferencesStore: NotificationPreferencesS
             announced: flag("notifyAnnounced"),
             reminder: flag("notifyReminder"),
             landed: flag("notifyLanded"),
-            reminderLeadMinutes: leadMinutes())
+            reminderLeadTime: leadTime())
     }
 
     public func save(_ preferences: NotificationPreferences) {
         defaults.set(preferences.announced, forKey: "notifyAnnounced")
         defaults.set(preferences.reminder, forKey: "notifyReminder")
         defaults.set(preferences.landed, forKey: "notifyLanded")
-        defaults.set(preferences.reminderLeadMinutes, forKey: "reminderLeadMinutes")
+        defaults.set(preferences.reminderLeadTime.rawValue, forKey: "reminderLeadMinutes")
     }
 
-    /// A missing or unknown value reads as the default.
-    private func leadMinutes() -> Int {
-        let stored = defaults.object(forKey: "reminderLeadMinutes") as? Int
-        return stored.flatMap { Reminder.leadMinuteChoices.contains($0) ? $0 : nil } ?? Reminder.defaultLeadMinutes
+    /// A missing, unknown or fractional value reads as 15 minutes.
+    private func leadTime() -> ReminderLeadTime {
+        (defaults.object(forKey: "reminderLeadMinutes") as? Int).flatMap(ReminderLeadTime.init(rawValue:))
+            ?? .fifteenMinutes
     }
 
     private func flag(_ key: String) -> Bool {

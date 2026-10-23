@@ -134,7 +134,7 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
         }
 
         let content = UNMutableNotificationContent()
-        content.title = String(localized: "Codex \(reset.typeNoun) in \(preferences.reminderLeadMinutes) minutes")
+        content.title = String(localized: "Codex \(reset.typeNoun) in \(reminder.leadTime.rawValue) minutes")
         content.subtitle = Format.when(reminder.scheduledFor)
         content.body = reset.text
         content.sound = .default

@@ -258,9 +258,9 @@ private struct NotificationSwitches: View {
                 .foregroundStyle(.secondary)
             SwitchRow("Announced", isOn: binding(\.announced))
             SwitchRow("Reminder", isOn: binding(\.reminder)) {
-                Picker("Reminder lead time", selection: leadMinutes) {
-                    ForEach(Reminder.leadMinuteChoices, id: \.self) { minutes in
-                        Text("\(minutes) min").tag(minutes)
+                Picker("Reminder lead time", selection: leadTime) {
+                    ForEach(ReminderLeadTime.allCases, id: \.self) { lead in
+                        Text("\(lead.rawValue) min").tag(lead)
                     }
                 }
                 .labelsHidden()
@@ -273,12 +273,12 @@ private struct NotificationSwitches: View {
         }
     }
 
-    private var leadMinutes: Binding<Int> {
+    private var leadTime: Binding<ReminderLeadTime> {
         Binding(
-            get: { model.notificationPreferences.reminderLeadMinutes },
-            set: { minutes in
+            get: { model.notificationPreferences.reminderLeadTime },
+            set: { lead in
                 var preferences = model.notificationPreferences
-                preferences.reminderLeadMinutes = minutes
+                preferences.reminderLeadTime = lead
                 model.setNotificationPreferences(preferences)
             })
     }
