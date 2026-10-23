@@ -76,6 +76,22 @@
 "reset due" = "reset atteso ora";
 "reset in %@" = "reset tra %@";
 
+/* Shortcuts and Siri (phrases are in AppShortcuts.strings) */
+"Get Next Codex Reset" = "Ottieni il prossimo reset di Codex";
+"Returns the pending Codex reset, or nothing when no reset is announced." = "Restituisce il reset di Codex in attesa, o niente se non è stato annunciato alcun reset.";
+"Next Codex Reset" = "Prossimo reset di Codex";
+"The next Codex %@ is %@, in %@." = "Il prossimo %1$@ di Codex è %2$@, tra %3$@.";
+"A Codex %@ was due %@ and hasn't landed yet." = "Un %1$@ di Codex era previsto per %2$@ e non è ancora arrivato.";
+"A Codex %@ is announced, but its time isn't given yet." = "È stato annunciato un %@ di Codex, ma l'orario non è ancora stato comunicato.";
+"No Codex reset is announced." = "Nessun reset di Codex annunciato.";
+"Codex Reset Radar hasn't loaded the reset status yet. Try again in a moment." = "Codex Reset Radar non ha ancora caricato lo stato dei reset. Riprova tra poco.";
+"Codex Reset" = "Reset di Codex";
+"Scheduled For" = "Previsto per";
+"Scheduled for %@" = "Previsto per %@";
+"Type" = "Tipo";
+"Announcement" = "Annuncio";
+"Source" = "Fonte";
+
 /* Poll failures */
 "Rate limited, retrying at %@" = "Troppe richieste, nuovo tentativo alle %@";
 "codex-resets.com is having trouble" = "codex-resets.com ha dei problemi";

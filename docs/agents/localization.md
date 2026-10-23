@@ -29,6 +29,8 @@ The menu bar countdown stays terse in every language (`45m`, `1h 59m`, `3d`): it
 2. Add the key with its Italian value to `Resources/it.lproj/Localizable.strings`, in the section that matches where it shows (Panel, Notifications, VoiceOver, …). Add it to every other `.lproj` too. If you can't translate one, say so in the PR. Never leave it out silently.
 3. `“%@”` and `Codex Reset Radar` stay untranslated.
 
+Siri phrases for App Shortcuts (`AppShortcutsProvider`) are the exception: their keys are the English phrases with `${applicationName}` in place of `\(.applicationName)`, and they go in `Resources/<code>.lproj/AppShortcuts.strings`, not `Localizable.strings`. Keep `${applicationName}` in every translation.
+
 ## Checking
 
 Extract the keys the compiler sees and compare them with each `.lproj`:

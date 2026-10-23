@@ -6,7 +6,8 @@ cd "$(dirname "$0")/.."
 APP_NAME="Codex Reset Radar"
 EXECUTABLE="CodexResetRadar"
 VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" Resources/Info.plist)
-BUILD_FLAGS=(-c release --arch arm64 --arch x86_64)
+# Swift Build (not the native build system) emits the constant values the App Intents step below reads.
+BUILD_FLAGS=(-c release --arch arm64 --arch x86_64 --build-system swiftbuild)
 
 swift build "${BUILD_FLAGS[@]}"
 BIN_DIR=$(swift build "${BUILD_FLAGS[@]}" --show-bin-path)
@@ -21,6 +22,39 @@ cp Resources/Info.plist "$APP/Contents/Info.plist"
 cp Resources/AppIcon.icns Resources/RadarMenuBarTemplate.png Resources/RadarMenuBarTemplate@2x.png \
     "$APP/Contents/Resources/"
 cp -R Resources/*.lproj "$APP/Contents/Resources/"
+
+# Shortcuts and Siri find the app's App Intents through Contents/Resources/Metadata.appintents.
+# Xcode extracts it at build time; SwiftPM doesn't, so run the same tool on what the compiler left behind.
+# The intermediates layout differs between Swift Build versions, so find the arm64 objects of the release build.
+INTENTS_OBJECTS=$(dirname "$(find .build -path "*Release*arm64*" -name "$EXECUTABLE.SwiftFileList" | head -1)")
+INTENTS_TMP=$(mktemp -d)
+find "$PWD/$INTENTS_OBJECTS" -name "*.swiftconstvalues" > "$INTENTS_TMP/ConstValuesList"
+if [ ! -s "$INTENTS_TMP/ConstValuesList" ]; then
+    echo "error: no .swiftconstvalues for $EXECUTABLE (looked in '$INTENTS_OBJECTS')" >&2
+    find .build -name "*.SwiftFileList" -o -name "*.swiftconstvalues" >&2
+    exit 1
+fi
+MIN_MACOS=$(/usr/libexec/PlistBuddy -c "Print LSMinimumSystemVersion" Resources/Info.plist)
+xcrun appintentsmetadataprocessor --quiet-warnings \
+    --output "$APP/Contents/Resources" \
+    --toolchain-dir "$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain" \
+    --module-name "$EXECUTABLE" \
+    --sdk-root "$(xcrun --sdk macosx --show-sdk-path)" \
+    --xcode-version "$(xcodebuild -version | awk '/Build version/ { print $3 }')" \
+    --platform-family macOS \
+    --deployment-target "$MIN_MACOS" \
+    --target-triple "arm64-apple-macos$MIN_MACOS" \
+    --source-file-list "$INTENTS_OBJECTS/$EXECUTABLE.SwiftFileList" \
+    --swift-const-vals-list "$INTENTS_TMP/ConstValuesList"
+test -f "$APP/Contents/Resources/Metadata.appintents/extract.actionsdata"
+# Siri matches the App Shortcut phrases (it.lproj/AppShortcuts.strings for Italian) through these trained assets.
+xcrun appintentsnltrainingprocessor --archive-ssu-assets \
+    --extracted-metadata-path "$APP/Contents/Resources/Metadata.appintents" \
+    --infoplist-path "$APP/Contents/Info.plist" \
+    --temp-dir-path "$INTENTS_TMP" \
+    --bundle-id "$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" Resources/Info.plist)" \
+    --product-path "$APP/Contents/Resources"
+rm -rf "$INTENTS_TMP"
 
 codesign --force --sign - --timestamp=none "$APP"
 ditto -c -k --keepParent "$APP" "dist/$EXECUTABLE-$VERSION.zip"
