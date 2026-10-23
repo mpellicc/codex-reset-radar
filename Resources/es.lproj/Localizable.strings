@@ -7,10 +7,10 @@
 "in %@" = "en %@";
 "Time not given yet" = "Hora aún no indicada";
 "View post" = "Ver publicación";
-"No reset announced" = "Ningún reinicio anunciado";
+"No reset announced" = "Ningún restablecimiento anunciado";
 "Checking…" = "Comprobando…";
 "Couldn't reach codex-resets.com" = "No se ha podido conectar con codex-resets.com";
-"Last reset %@" = "Último reinicio %@";
+"Last reset %@" = "Último restablecimiento %@";
 "Every %.1f days on average" = "Cada %.1f días de media";
 "Checked %@" = "Última comprobación: %@";
 "Data from codex-resets.com" = "Datos de codex-resets.com";
@@ -19,12 +19,12 @@
 "Running from a temporary location" = "Ejecutándose desde una ubicación temporal";
 "Quit, move Codex Reset Radar to Applications and open it from there. Launch at login is disabled until then, because it would point at a path that disappears." = "Sal, mueve Codex Reset Radar a Aplicaciones y ábrelo desde allí. Hasta entonces, la apertura al iniciar sesión está desactivada, porque apuntaría a una ruta que desaparece.";
 "Launch at login" = "Abrir al iniciar sesión";
-"Open Login Items" = "Abrir Ítems de inicio de sesión";
-"Approve Codex Reset Radar in System Settings → General → Login Items." = "Aprueba Codex Reset Radar en Ajustes del Sistema → General → Ítems de inicio de sesión.";
+"Open Login Items" = "Abrir Ítems de inicio y extensiones";
+"Approve Codex Reset Radar in System Settings → General → Login Items." = "Aprueba Codex Reset Radar en Ajustes del Sistema → General → Ítems de inicio y extensiones.";
 "Couldn't enable launch at login: %@" = "No se ha podido activar la apertura al iniciar sesión: %@";
 "Couldn't disable launch at login: %@" = "No se ha podido desactivar la apertura al iniciar sesión: %@";
 "Notifications are off" = "Las notificaciones están desactivadas";
-"You won't hear when a reset is announced or lands." = "No sabrás cuándo se anuncia o llega un reinicio.";
+"You won't hear when a reset is announced or lands." = "No sabrás cuándo se anuncia o llega un restablecimiento.";
 "Open Notification Settings" = "Abrir ajustes de Notificaciones";
 "Notify me about" = "Avisarme de";
 "Announced" = "Anuncio";
@@ -42,17 +42,17 @@
 "Strong" = "Fuerte";
 
 /* Reset types */
-"Reset" = "Reinicio";
-"Banked reset" = "Reinicio acumulado";
-"reset" = "reinicio";
-"banked reset" = "reinicio acumulado";
+"Reset" = "Restablecimiento";
+"Banked reset" = "Restablecimiento guardado";
+"reset" = "restablecimiento";
+"banked reset" = "restablecimiento guardado";
 
 /* Notifications */
 "Codex %@ announced" = "Codex: %@ anunciado";
 "Codex %@ rescheduled" = "Codex: %@ reprogramado";
 "Codex %@ landed" = "Codex: ya ha llegado el %@";
 "Your usage limits are back." = "Tus límites de uso se han restablecido.";
-"That's reset #%lld 🎉" = "Es el reinicio n.º %lld 🎉";
+"That's reset #%lld 🎉" = "Es el restablecimiento n.º %lld 🎉";
 "Codex %@ in %lld minutes" = "Codex: %@ en %lld minutos";
 
 /* Menu bar countdown: 45m, 1h 59m, 9h, 3d, due */
@@ -73,22 +73,22 @@
 "%lld days" = "%lld días";
 "%@, offline, %@" = "%1$@, sin conexión, %2$@";
 "%@, offline" = "%@, sin conexión";
-"checking for resets" = "buscando reinicios";
-"no reset announced" = "ningún reinicio anunciado";
-"reset announced, time not given yet" = "reinicio anunciado, hora aún no indicada";
-"reset due" = "reinicio previsto ahora";
-"reset in %@" = "reinicio en %@";
+"checking for resets" = "buscando restablecimientos";
+"no reset announced" = "ningún restablecimiento anunciado";
+"reset announced, time not given yet" = "restablecimiento anunciado, hora aún no indicada";
+"reset due" = "restablecimiento previsto ahora";
+"reset in %@" = "restablecimiento en %@";
 
 /* Shortcuts and Siri (phrases are in AppShortcuts.strings) */
-"Get Next Codex Reset" = "Obtener el próximo reinicio de Codex";
-"Returns the pending Codex reset, or nothing when no reset is announced." = "Devuelve el reinicio de Codex pendiente, o nada si no se ha anunciado ningún reinicio.";
-"Next Codex Reset" = "Próximo reinicio de Codex";
+"Get Next Codex Reset" = "Obtener el próximo restablecimiento de Codex";
+"Returns the pending Codex reset, or nothing when no reset is announced." = "Devuelve el restablecimiento de Codex pendiente, o nada si no se ha anunciado ningún restablecimiento.";
+"Next Codex Reset" = "Próximo restablecimiento de Codex";
 "The next Codex %@ is %@, in %@." = "El próximo %1$@ de Codex está previsto para %2$@, dentro de %3$@.";
 "A Codex %@ was due %@ and hasn't landed yet." = "Un %1$@ de Codex estaba previsto para %2$@ y aún no ha llegado.";
 "A Codex %@ is announced, but its time isn't given yet." = "Se ha anunciado un %@ de Codex, pero aún no se ha indicado la hora.";
-"No Codex reset is announced." = "No hay ningún reinicio de Codex anunciado.";
-"Codex Reset Radar hasn't loaded the reset status yet. Try again in a moment." = "Codex Reset Radar aún no ha cargado el estado de los reinicios. Vuelve a intentarlo en un momento.";
-"Codex Reset" = "Reinicio de Codex";
+"No Codex reset is announced." = "No hay ningún restablecimiento de Codex anunciado.";
+"Codex Reset Radar hasn't loaded the reset status yet. Try again in a moment." = "Codex Reset Radar aún no ha cargado el estado de los restablecimientos. Vuelve a intentarlo en un momento.";
+"Codex Reset" = "Restablecimiento de Codex";
 "Scheduled For" = "Previsto para";
 "Scheduled for %@" = "Previsto para %@";
 "Type" = "Tipo";
