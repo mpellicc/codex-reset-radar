@@ -4,6 +4,30 @@ All notable changes to this project are documented here. The format follows
 [Conventional Commits](https://www.conventionalcommits.org/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.9.0](https://github.com/mpellicc/codex-reset-radar/compare/v0.8.0...v0.9.0) (2026-10-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* the minimum macOS is now 15.
+
+### Features
+
+* add a Shortcuts action for the next reset ([#82](https://github.com/mpellicc/codex-reset-radar/issues/82)) ([f4507a6](https://github.com/mpellicc/codex-reset-radar/commit/f4507a65d2578cf0390d70c209be57c2e341f93b))
+* choose the reminder lead time ([#80](https://github.com/mpellicc/codex-reset-radar/issues/80)) ([69e3042](https://github.com/mpellicc/codex-reset-radar/commit/69e304230ba40d78de842c5328f74b4a8e0c9108))
+* require macOS 15 ([#79](https://github.com/mpellicc/codex-reset-radar/issues/79)) ([d1005d7](https://github.com/mpellicc/codex-reset-radar/commit/d1005d7d1d61092e2cc4ff164999bbbc527f3d5c))
+* show the watch forecast in the panel ([#81](https://github.com/mpellicc/codex-reset-radar/issues/81)) ([3b4744c](https://github.com/mpellicc/codex-reset-radar/commit/3b4744c2d39358dc58bce0050c4d26d26aa3c4df))
+
+
+### Bug Fixes
+
+* translate the panel's switch labels ([#77](https://github.com/mpellicc/codex-reset-radar/issues/77)) ([4129a51](https://github.com/mpellicc/codex-reset-radar/commit/4129a51bc049b02cde9fb6ff30ba4aa70a93d3e4)), closes [#66](https://github.com/mpellicc/codex-reset-radar/issues/66)
+
+
+### Documentation
+
+* add a localization guide for agents ([364af7e](https://github.com/mpellicc/codex-reset-radar/commit/364af7e576505116583f20d47fec1d284257cfc5))
+
 ## [0.8.0](https://github.com/mpellicc/codex-reset-radar/compare/v0.7.0...v0.8.0) (2026-10-22)
 
 
