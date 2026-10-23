@@ -102,12 +102,25 @@ poll; the countdown stays next to it. VoiceOver reads the item as a sentence, fo
   launched straight from Downloads), a warning says to quit, move the app to Applications and
   open it from there, and the toggle is disabled. The app only detects this; it doesn't move itself.
 
+**Shortcuts and Siri.** One App Intent, **Get Next Codex Reset**, with the Siri phrases "When is the next
+Codex reset in Codex Reset Radar", "Get the next Codex reset from Codex Reset Radar" and "Next Codex reset in
+Codex Reset Radar". It returns the pending reset as a Codex Reset with Scheduled For (empty when no time is
+given), Type (`regular` or `banked`, as the API sends it), Announcement (the post text) and Source (the post
+URL), or nothing when no reset is pending. Siri and Shortcuts also say it in a sentence: when it is due and how
+far away, "time not given yet", "hasn't landed yet" past due, or "No Codex reset is announced". It runs in the
+app's process and reads the status the app already has; it never polls. Right after a launch it waits up to
+10 seconds for the launch poll; if there is still no status (the poll failed), it fails with "hasn't loaded the
+reset status yet". A status that is stale because later polls failed is still answered from.
+
 ## Tech
 
 - Swift + SwiftUI `MenuBarExtra`, macOS 13+, Swift Package. Sparkle is its only dependency.
 - `LSUIElement` (no Dock icon), `UserNotifications`, `SMAppService` for login item.
 - `scripts/build-app.sh` builds a universal binary, assembles the `.app` with `Sparkle.framework`
-  in `Contents/Frameworks`, ad-hoc signs it and zips it into `dist/`.
+  in `Contents/Frameworks`, ad-hoc signs it and zips it into `dist/`. It builds with Swift Build
+  (`--build-system swiftbuild`) and runs Xcode's `appintentsmetadataprocessor` and `appintentsnltrainingprocessor`
+  to put the App Intents metadata (`Metadata.appintents`) and Siri phrase assets in the bundle, which plain
+  SwiftPM doesn't do.
 - `scripts/make-appcast.sh` signs the zip with the EdDSA private key and writes `dist/appcast.xml`;
   the release job attaches both to the GitHub release.
 

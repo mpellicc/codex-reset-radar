@@ -1,10 +1,18 @@
+import AppIntents
 import RadarCore
 import SwiftUI
 
 @main
 struct CodexResetRadarApp: App {
-    @StateObject private var model = RadarModel()
+    @StateObject private var model: RadarModel
     @StateObject private var updater = Updater()
+
+    init() {
+        let model = RadarModel()
+        _model = StateObject(wrappedValue: model)
+        // The Shortcuts action reads the same model the panel shows (NextResetIntent).
+        AppDependencyManager.shared.add(dependency: model)
+    }
 
     var body: some Scene {
         MenuBarExtra {
