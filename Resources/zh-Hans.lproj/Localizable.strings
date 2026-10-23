@@ -1,0 +1,104 @@
+/* Simplified Chinese. Keys are the English text; a key left out shows in English. */
+
+/* Panel */
+"Check now" = "立即检查";
+"%@ announced" = "%@已公布";
+"Scheduled time passed, waiting for it to land" = "预定时间已过，等待生效";
+"in %@" = "%@后";
+"Time not given yet" = "尚未公布时间";
+"View post" = "查看帖子";
+"No reset announced" = "暂无已公布的重置";
+"Checking…" = "正在检查…";
+"Couldn't reach codex-resets.com" = "无法连接 codex-resets.com";
+"Last reset %@" = "上次重置：%@";
+"Every %.1f days on average" = "平均每%.1f天一次";
+"Checked %@" = "检查于 %@";
+"Data from codex-resets.com" = "数据来自 codex-resets.com";
+"Quit" = "退出";
+"Check for Updates…" = "检查更新…";
+"Running from a temporary location" = "正在从临时位置运行";
+"Quit, move Codex Reset Radar to Applications and open it from there. Launch at login is disabled until then, because it would point at a path that disappears." = "请退出，将 Codex Reset Radar 移到“应用程序”文件夹，然后从那里打开。在此之前，“登录时打开”已停用，因为它会指向一个即将消失的路径。";
+"Launch at login" = "登录时打开";
+"Open Login Items" = "打开登录项与扩展";
+"Approve Codex Reset Radar in System Settings → General → Login Items." = "请在“系统设置”→“通用”→“登录项与扩展”中允许 Codex Reset Radar。";
+"Couldn't enable launch at login: %@" = "无法启用“登录时打开”：%@";
+"Couldn't disable launch at login: %@" = "无法停用“登录时打开”：%@";
+"Notifications are off" = "通知已关闭";
+"You won't hear when a reset is announced or lands." = "重置公布或生效时，你将不会收到通知。";
+"Open Notification Settings" = "打开通知设置";
+"Notify me about" = "通知我";
+"Announced" = "公布";
+"Reminder" = "提醒";
+"Landed" = "生效";
+"Reminder lead time" = "提前提醒时间";
+"%lld min" = "%lld分钟";
+
+/* Panel: watch forecast */
+"Forecast" = "预测";
+"%@, %lld%% chance" = "%@，概率 %lld%%";
+"View source" = "查看来源";
+"AI guess, not an announcement" = "AI 推测，并非官方公告";
+"Elevated" = "偏高";
+"Strong" = "很高";
+
+/* Reset types */
+"Reset" = "重置";
+"Banked reset" = "储备重置";
+"reset" = "重置";
+"banked reset" = "储备重置";
+
+/* Notifications */
+"Codex %@ announced" = "Codex %@已公布";
+"Codex %@ rescheduled" = "Codex %@已改期";
+"Codex %@ landed" = "Codex %@已生效";
+"Your usage limits are back." = "你的使用额度已恢复。";
+"That's reset #%lld 🎉" = "这是第 %lld 次重置 🎉";
+"Codex %@ in %lld minutes" = "Codex %@将在%lld分钟后生效";
+
+/* Menu bar countdown: 45m, 1h 59m, 9h, 3d, due */
+"due" = "到点";
+/* Menu bar, past due under Reduce Motion (in place of the hourglass) */
+"Now" = "现在";
+"%lldm" = "%lld分";
+"%lldh %lldm" = "%lld小时%lld分";
+"%lldh" = "%lld小时";
+"%lldd" = "%lld天";
+
+/* VoiceOver */
+"spoken-due" = "已到预定时间";
+"1 minute" = "1分钟";
+"%lld minutes" = "%lld分钟";
+"1 hour" = "1小时";
+"%lld hours" = "%lld小时";
+"%lld days" = "%lld天";
+"%@, offline, %@" = "%@，离线，%@";
+"%@, offline" = "%@，离线";
+"checking for resets" = "正在检查重置";
+"no reset announced" = "暂无已公布的重置";
+"reset announced, time not given yet" = "重置已公布，尚未公布时间";
+"reset due" = "重置已到预定时间";
+"reset in %@" = "%@后重置";
+
+/* Shortcuts and Siri (phrases are in AppShortcuts.strings) */
+"Get Next Codex Reset" = "获取下一次 Codex 重置";
+"Returns the pending Codex reset, or nothing when no reset is announced." = "返回待生效的 Codex 重置；若尚未公布重置，则不返回任何内容。";
+"Next Codex Reset" = "下一次 Codex 重置";
+"The next Codex %@ is %@, in %@." = "下一次 Codex %@定于 %@，即 %@后。";
+"A Codex %@ was due %@ and hasn't landed yet." = "Codex %@原定于 %@，但尚未生效。";
+"A Codex %@ is announced, but its time isn't given yet." = "Codex %@已公布，但尚未公布时间。";
+"No Codex reset is announced." = "尚未公布 Codex 重置。";
+"Codex Reset Radar hasn't loaded the reset status yet. Try again in a moment." = "Codex Reset Radar 尚未加载重置状态，请稍后再试。";
+"Codex Reset" = "Codex 重置";
+"Scheduled For" = "预定时间";
+"Scheduled for %@" = "预定于 %@";
+"Type" = "类型";
+"Announcement" = "公告";
+"Source" = "来源";
+
+/* Poll failures */
+"Rate limited, retrying at %@" = "请求过于频繁，将于 %@ 重试";
+"codex-resets.com is having trouble" = "codex-resets.com 出现问题";
+"Request timed out" = "请求超时";
+"You're offline" = "你已离线";
+"Unexpected response from codex-resets.com" = "codex-resets.com 返回了意外的响应";
+"codex-resets.com returned HTTP %lld" = "codex-resets.com 返回了 HTTP %lld";
