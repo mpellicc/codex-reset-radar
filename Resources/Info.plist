@@ -10,6 +10,7 @@
 	<array>
 		<string>en</string>
 		<string>it</string>
+		<string>es</string>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>CodexResetRadar</string>
