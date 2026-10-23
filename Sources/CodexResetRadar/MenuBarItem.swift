@@ -6,7 +6,7 @@ import SwiftUI
 /// The menu bar item and the panel it opens.
 ///
 /// It is an NSStatusItem hosting a live SwiftUI view, not a `MenuBarExtra`: a `MenuBarExtra` label is
-/// drawn once into a static image, so symbol effects on the radar never animate (ADR 0003).
+/// drawn once into a static image, so symbol effects on the radar never animate (ADR 0004).
 @MainActor
 final class MenuBarItem: NSObject {
     private let model: RadarModel

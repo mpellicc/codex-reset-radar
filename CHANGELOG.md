@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows
 [Conventional Commits](https://www.conventionalcommits.org/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.9.1](https://github.com/mpellicc/codex-reset-radar/compare/v0.9.0...v0.9.1) (2026-10-23)
+
+
+### Bug Fixes
+
+* record the real SDK version so the app gets the current macOS look ([#85](https://github.com/mpellicc/codex-reset-radar/issues/85)) ([5ea6b94](https://github.com/mpellicc/codex-reset-radar/commit/5ea6b94b6a08dbb182e05de5929f602b2e37bca2))
+
 ## [0.9.0](https://github.com/mpellicc/codex-reset-radar/compare/v0.8.0...v0.9.0) (2026-10-23)
 
 
