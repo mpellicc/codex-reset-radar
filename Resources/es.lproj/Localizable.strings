@@ -43,9 +43,9 @@
 
 /* Reset types */
 "Reset" = "Restablecimiento";
-"Banked reset" = "Restablecimiento guardado";
+"Banked reset" = "Restablecimiento acumulado";
 "reset" = "restablecimiento";
-"banked reset" = "restablecimiento guardado";
+"banked reset" = "restablecimiento acumulado";
 
 /* Notifications */
 "Codex %@ announced" = "Codex: %@ anunciado";
