@@ -1,4 +1,4 @@
 /* Italian Siri and Spotlight phrases for the App Shortcuts in NextResetIntent.swift. Keys are the English phrases. */
-"When is the next Codex reset in ${applicationName}" = "Quando è il prossimo reset di Codex in ${applicationName}";
-"Get the next Codex reset from ${applicationName}" = "Ottieni il prossimo reset di Codex da ${applicationName}";
-"Next Codex reset in ${applicationName}" = "Prossimo reset di Codex in ${applicationName}";
+"When is the next Codex reset in ${applicationName}" = "Quando è la prossima reimpostazione di Codex in ${applicationName}";
+"Get the next Codex reset from ${applicationName}" = "Ottieni la prossima reimpostazione di Codex da ${applicationName}";
+"Next Codex reset in ${applicationName}" = "Prossima reimpostazione di Codex in ${applicationName}";
