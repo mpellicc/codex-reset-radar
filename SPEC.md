@@ -80,11 +80,14 @@ switching it back on does not send what was skipped in the meantime. Turning Rem
 scheduled reminder request; turning it back on schedules it again for the pending dated reset right away,
 not at the next poll. The menu bar countdown and the panel's reset details are not affected.
 
-**Menu bar.** Radar icon. When a dated reset is pending, the icon is followed by a
+**Menu bar.** Radar icon: a custom SF Symbol with its rings and needle on separate layers, matching
+the system's menu bar weight. When a dated reset is pending, the icon is followed by a
 countdown: `45m`, `1h 59m`, `9h`, `3d`, or `due` once the time has passed. After 2 consecutive failed
 polls (being offline counts) the icon becomes a slashed antenna, until the next successful
 poll; the countdown stays next to it. VoiceOver reads the item as a sentence, for example
 "Codex Reset Radar, reset in 9 hours", "…, reset due", "…, no reset announced" or "…, offline".
+Clicking the item opens the panel under it, on the display that was clicked; Escape, a click elsewhere
+or another click on the item closes it. The panel never takes focus from the app in front.
 
 **Panel.**
 
@@ -126,8 +129,10 @@ reset status yet". A status that is stale because later polls failed is still an
 
 ## Tech
 
-- Swift + SwiftUI `MenuBarExtra`, macOS 15+. A Swift Package for code and tests; the app bundle is built by
-  Xcode. Sparkle is its only dependency.
+- Swift + SwiftUI, macOS 15+. A Swift Package for code and tests; the app bundle is built by
+  Xcode. Sparkle is its only dependency. The menu bar item is an `NSStatusItem` hosting SwiftUI, with an
+  `NSPanel` for the panel, so symbol effects can animate (ADR 0004). The radar symbol is drawn by
+  `scripts/menu-bar-symbol.py` into `Resources/Assets.xcassets`, which Xcode compiles with the app.
 - `LSUIElement` (no Dock icon), `UserNotifications`, `SMAppService` for login item.
 - `scripts/build-app.sh` generates an Xcode project from `project.yml` with XcodeGen and builds the
   universal, ad-hoc signed `.app` with `xcodebuild`: Xcode embeds `Sparkle.framework`, extracts the App Intents
