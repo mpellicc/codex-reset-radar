@@ -77,24 +77,65 @@ final class MenuBarItem: NSObject {
 }
 
 /// The radar, and the countdown while a dated reset is pending.
+///
+/// It moves on events only: one needle sweep per poll, the rings lighting up from the centre while
+/// the reset is within the reminder lead time, an hourglass once it is past due, and one bounce when
+/// it lands. Under Reduce Motion nothing moves, and "Now" stands in for the hourglass.
 struct MenuBarLabel: View {
     @ObservedObject var model: RadarModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var sweeps = 0
+    @State private var landings = 0
 
     var body: some View {
+        let phase = MenuBarPhase(
+            pending: model.pending, now: model.now, leadTime: model.notificationPreferences.reminderLeadTime)
         HStack(spacing: 4) {
             if model.isOffline {
                 Image(systemName: "antenna.radiowaves.left.and.right.slash")
             } else {
-                Self.radar
+                radar(phase)
             }
-            if let when = model.pending?.scheduledFor {
-                Text(Format.countdown(to: when, from: model.now))
+            switch phase {
+            case .quiet:
+                EmptyView()
+            case .counting, .imminent:
+                if let when = model.pending?.scheduledFor {
+                    // Fixed-width digits, so the item doesn't change width as the minutes go by.
+                    Text(Format.countdown(to: when, from: model.now)).monospacedDigit()
+                }
+            case .pastDue:
+                if reduceMotion {
+                    Text("Now")
+                } else {
+                    Image(systemName: "hourglass")
+                        .symbolEffect(.rotate, options: .repeat(.periodic(delay: 1.5)))
+                }
             }
         }
         .font(.system(size: NSFont.menuBarFont(ofSize: 0).pointSize))
         .fixedSize()
         // The status item's button carries the VoiceOver label.
         .accessibilityHidden(true)
+        .onChange(of: model.isRefreshing) { _, refreshing in
+            if refreshing { sweeps += 1 }
+        }
+        // The first status only tells us what already landed; a later change is a new landing.
+        .onChange(of: model.status?.latestReset?.id) { old, new in
+            if old != nil, new != old { landings += 1 }
+        }
+    }
+
+    @ViewBuilder private func radar(_ phase: MenuBarPhase) -> some View {
+        if reduceMotion {
+            Self.radar
+        } else {
+            Self.radar
+                .symbolEffect(.rotate.byLayer, value: sweeps)
+                .symbolEffect(.bounce, value: landings)
+                .symbolEffect(
+                    .variableColor.iterative, options: .repeat(.continuous).speed(0.5), isActive: phase == .imminent)
+        }
     }
 
     // The custom symbol is compiled into the built .app only; `swift run` falls back to an SF Symbol.
