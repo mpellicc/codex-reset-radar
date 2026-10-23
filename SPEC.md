@@ -58,15 +58,18 @@ relaunches. The first id ever seen is recorded without notifying: it is history,
 `scheduled_reset` that clears with no new `latest_reset` was called off and is dropped silently.
 Clicking the notification opens codex-resets.com, since `latest_reset` has no post URL.
 
-A reminder, "Codex reset in 15 minutes", is sent 15 minutes before the `scheduled_for` of a
-pending reset. The lead time is fixed. It is scheduled with the system (a calendar-triggered
+A reminder, "Codex reset in 15 minutes", is sent the lead time before the `scheduled_for` of a
+pending reset. The lead time is a setting: 5, 15, 30 or 60 minutes, 15 by default (the text follows it,
+"Codex reset in 30 minutes"). It is kept in `UserDefaults` (`reminderLeadMinutes`; a missing or unknown
+value reads as 15) and is chosen from a picker on the Reminder row. Changing it replaces the pending
+reminder at once, like toggling Reminder. It is scheduled with the system (a calendar-triggered
 notification request) so it fires even if no poll happens near the time. A reschedule replaces it,
 so it fires once per `id` and `scheduled_for`. It is removed when the reset lands or is called off.
-It is skipped when the reset is announced less than 15 minutes ahead: the announcement covers it.
+It is skipped when the reset is announced at or inside the lead time: the announcement covers it.
 Clicking the reminder opens the source post.
 
 **Notification switches.** Each kind can be turned off on its own: **Announced** ("reset announced"
-and "rescheduled"), **Reminder** ("in 15 minutes") and **Landed** ("reset landed"). All three are on by
+and "rescheduled"), **Reminder** ("in N minutes") and **Landed** ("reset landed"). All three are on by
 default. They are kept in `UserDefaults` (`notifyAnnounced`, `notifyReminder`, `notifyLanded`; a missing
 key reads as on) and apply at once, without a restart. A switched-off kind is never sent, but the
 trackers keep recording what they see (the notified pairs and the last seen `latest_reset.id`), so
@@ -93,7 +96,7 @@ poll; the countdown stays next to it. VoiceOver reads the item as a sentence, fo
 - Last reset (relative) and average interval.
 - Last checked time, error if the last poll failed.
 - Launch at login toggle, then under a small "Notify me about" heading three checkboxes:
-  Announced, Reminder, Landed (see Notification switches), then the "Data from codex-resets.com"
+  Announced, Reminder (with its lead time picker), Landed (see Notification switches), then the "Data from codex-resets.com"
   link, and "Check for Updates…" with Quit.
 - The toggle reads the login item status every time the panel opens. A failed change
   leaves the toggle at the real status and shows the error under it. When the item needs
@@ -114,7 +117,7 @@ reset status yet". A status that is stale because later polls failed is still an
 
 ## Tech
 
-- Swift + SwiftUI `MenuBarExtra`, macOS 13+, Swift Package. Sparkle is its only dependency.
+- Swift + SwiftUI `MenuBarExtra`, macOS 15+, Swift Package. Sparkle is its only dependency.
 - `LSUIElement` (no Dock icon), `UserNotifications`, `SMAppService` for login item.
 - `scripts/build-app.sh` builds a universal binary, assembles the `.app` with `Sparkle.framework`
   in `Contents/Frameworks`, ad-hoc signs it and zips it into `dist/`. It builds with Swift Build

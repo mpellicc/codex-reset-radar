@@ -123,11 +123,7 @@ struct RadarPanel: View {
 /// as if it were selected. Clicking still works; only the ring goes.
 private struct NoFocusEffect: ViewModifier {
     func body(content: Content) -> some View {
-        if #available(macOS 14.0, *) {
-            content.focusEffectDisabled()
-        } else {
-            content
-        }
+        content.focusEffectDisabled()
     }
 }
 
@@ -156,22 +152,35 @@ private struct TranslocationWarning: View {
 }
 
 /// A setting as macOS System Settings shows it: the label on the left, a switch on the right edge.
-private struct SwitchRow: View {
+private struct SwitchRow<Accessory: View>: View {
     private let title: LocalizedStringKey
     @Binding private var isOn: Bool
+    private let accessory: Accessory
 
-    init(_ title: LocalizedStringKey, isOn: Binding<Bool>) {
+    /// `accessory` sits right after the label, before the switch.
+    init(_ title: LocalizedStringKey, isOn: Binding<Bool>, @ViewBuilder accessory: () -> Accessory) {
         self.title = title
         _isOn = isOn
+        self.accessory = accessory()
     }
 
     var body: some View {
         Toggle(isOn: $isOn) {
-            Text(title).frame(maxWidth: .infinity, alignment: .leading)
+            HStack {
+                Text(title)
+                accessory
+                Spacer(minLength: 0)
+            }
         }
         .toggleStyle(.switch)
         // System Settings uses the mini switch; the regular one dwarfs the panel's text.
         .controlSize(.mini)
+    }
+}
+
+extension SwitchRow where Accessory == EmptyView {
+    init(_ title: LocalizedStringKey, isOn: Binding<Bool>) {
+        self.init(title, isOn: isOn) { EmptyView() }
     }
 }
 
@@ -244,9 +253,30 @@ private struct NotificationSwitches: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
             SwitchRow("Announced", isOn: binding(\.announced))
-            SwitchRow("Reminder", isOn: binding(\.reminder))
+            SwitchRow("Reminder", isOn: binding(\.reminder)) {
+                Picker("Reminder lead time", selection: leadTime) {
+                    ForEach(ReminderLeadTime.allCases, id: \.self) { lead in
+                        Text("\(lead.rawValue) min").tag(lead)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .fixedSize()
+                .controlSize(.small)
+                .disabled(!model.notificationPreferences.reminder)
+            }
             SwitchRow("Landed", isOn: binding(\.landed))
         }
+    }
+
+    private var leadTime: Binding<ReminderLeadTime> {
+        Binding(
+            get: { model.notificationPreferences.reminderLeadTime },
+            set: { lead in
+                var preferences = model.notificationPreferences
+                preferences.reminderLeadTime = lead
+                model.setNotificationPreferences(preferences)
+            })
     }
 
     private func binding(_ kind: WritableKeyPath<NotificationPreferences, Bool>) -> Binding<Bool> {

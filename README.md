@@ -31,7 +31,7 @@ Or by hand:
 4. Allow notifications when asked.
 5. Click the radar icon in the menu bar and turn on **Launch at login**.
 
-Requires macOS 13 or later.
+Requires macOS 15 or later.
 
 The app keeps itself up to date: it checks once a day, or when you click **Check for Updates…** in the
 panel, and installs new versions in place without another "Open Anyway". Versions 0.7.0 and older
@@ -42,7 +42,8 @@ can't do this, so update from those once by hand.
 - Checks codex-resets.com every 15 minutes and after your Mac wakes.
 - When a reset with a date is announced, sends a notification (and another if the time changes).
 - Shows a countdown next to the menu bar icon (`9h`, `1h 59m`, `45m`, `due`) until it lands.
-- Lets you turn announced, reminder and landed notifications on or off separately, from the panel.
+- Lets you turn announced, reminder and landed notifications on or off separately, from the panel, and choose how long before a reset the reminder comes (5, 15, 30 or 60 minutes).
+- Notification sound follows macOS: use the per-app "Play sound for notifications" switch in System Settings → Notifications → Codex Reset Radar (the panel's "Open Notification Settings" button takes you there).
 - Speaks your macOS language (English or Italian so far); announcement posts stay in their original wording.
 
 ## Troubleshooting

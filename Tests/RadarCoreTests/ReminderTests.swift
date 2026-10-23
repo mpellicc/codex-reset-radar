@@ -66,4 +66,15 @@ final class ReminderTests: XCTestCase {
         XCTAssertNotNil(Reminder.planned(for: reset(in: 3600), now: now))
         XCTAssertNil(Reminder.planned(for: nil, now: now))
     }
+
+    func testSixtyMinuteLeadIsArmedAnHourBefore() throws {
+        let reminder = try XCTUnwrap(Reminder.planned(for: reset(in: 7200), now: now, leadTime: .sixtyMinutes))
+        XCTAssertEqual(reminder.fireDate, now.addingTimeInterval(60 * 60))
+    }
+
+    func testSkippedWhenAnnouncedAtOrInsideTheLeadTime() {
+        XCTAssertNil(Reminder.planned(for: reset(in: 20 * 60), now: now, leadTime: .thirtyMinutes))
+        XCTAssertNil(Reminder.planned(for: reset(in: 30 * 60), now: now, leadTime: .thirtyMinutes))
+        XCTAssertNotNil(Reminder.planned(for: reset(in: 30 * 60 + 1), now: now, leadTime: .thirtyMinutes))
+    }
 }

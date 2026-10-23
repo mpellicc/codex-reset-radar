@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "CodexResetRadar",
-    platforms: [.macOS(.v13)],
+    platforms: [.macOS(.v15)],
     dependencies: [
         .package(url: "https://github.com/sparkle-project/Sparkle", from: "2.10.0")
     ],
