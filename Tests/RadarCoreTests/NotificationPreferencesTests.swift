@@ -58,6 +58,48 @@ final class NotificationPreferencesTests: XCTestCase {
         XCTAssertEqual(UserDefaultsNotificationPreferencesStore(defaults: defaults).load(), NotificationPreferences())
     }
 
+    func testNothingStoredLoadsAsFifteenMinutes() throws {
+        let preferences = UserDefaultsNotificationPreferencesStore(defaults: defaults).load()
+        XCTAssertEqual(preferences.reminderLeadTime, .fifteenMinutes)
+        let reminder = try XCTUnwrap(preferences.plannedReminder(for: pending(in: 3600), now: now))
+        XCTAssertEqual(reminder.fireDate, now.addingTimeInterval(45 * 60))
+    }
+
+    func testEveryLeadTimePersists() {
+        let store = UserDefaultsNotificationPreferencesStore(defaults: defaults)
+        for lead in ReminderLeadTime.allCases {
+            store.save(NotificationPreferences(reminderLeadTime: lead))
+            XCTAssertEqual(defaults.integer(forKey: "reminderLeadMinutes"), lead.rawValue)
+            XCTAssertEqual(store.load().reminderLeadTime, lead)
+        }
+    }
+
+    func testUnsupportedStoredLeadLoadsAsFifteenMinutes() {
+        let values: [Any] = [-5, 0, 20, 90, Float(5.5), Float(30.5), "30"]
+        for value in values {
+            defaults.set(value, forKey: "reminderLeadMinutes")
+            let preferences = UserDefaultsNotificationPreferencesStore(defaults: defaults).load()
+            XCTAssertEqual(preferences.reminderLeadTime, .fifteenMinutes, "Stored lead: \(value)")
+        }
+    }
+
+    func testChangingTheLeadTimeMovesThePlannedReminder() throws {
+        let reset = pending(in: 7200)
+        let fifteen = try XCTUnwrap(NotificationPreferences().plannedReminder(for: reset, now: now))
+        let thirty = try XCTUnwrap(
+            NotificationPreferences(reminderLeadTime: .thirtyMinutes).plannedReminder(for: reset, now: now))
+        XCTAssertEqual(fifteen.fireDate, now.addingTimeInterval(105 * 60))
+        XCTAssertEqual(thirty.fireDate, now.addingTimeInterval(90 * 60))
+        // A different reminder, so the notifier replaces the pending request instead of keeping it.
+        XCTAssertNotEqual(fifteen, thirty)
+    }
+
+    func testLongerLeadTimeThanWhatIsLeftPlansNothing() {
+        let reset = pending(in: 20 * 60)
+        XCTAssertNotNil(NotificationPreferences().plannedReminder(for: reset, now: now))
+        XCTAssertNil(NotificationPreferences(reminderLeadTime: .thirtyMinutes).plannedReminder(for: reset, now: now))
+    }
+
     func testPersistenceRoundTrip() {
         let store = UserDefaultsNotificationPreferencesStore(defaults: defaults)
         let chosen = NotificationPreferences(announced: true, reminder: false, landed: false)
