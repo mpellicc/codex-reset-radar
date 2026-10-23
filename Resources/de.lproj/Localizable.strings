@@ -3,14 +3,14 @@
 /* Panel */
 "Check now" = "Jetzt prüfen";
 "%@ announced" = "%@ angekündigt";
-"Scheduled time passed, waiting for it to land" = "Geplante Zeit verstrichen, warte auf den Reset";
+"Scheduled time passed, waiting for it to land" = "Geplante Zeit verstrichen, warte auf die Zurücksetzung";
 "in %@" = "in %@";
 "Time not given yet" = "Uhrzeit noch nicht bekannt";
 "View post" = "Beitrag ansehen";
-"No reset announced" = "Kein Reset angekündigt";
+"No reset announced" = "Keine Zurücksetzung angekündigt";
 "Checking…" = "Wird geprüft …";
 "Couldn't reach codex-resets.com" = "codex-resets.com nicht erreichbar";
-"Last reset %@" = "Letzter Reset %@";
+"Last reset %@" = "Letzte Zurücksetzung %@";
 "Every %.1f days on average" = "Im Schnitt alle %.1f Tage";
 "Checked %@" = "Geprüft um %@";
 "Data from codex-resets.com" = "Daten von codex-resets.com";
@@ -24,7 +24,7 @@
 "Couldn't enable launch at login: %@" = "„Bei der Anmeldung öffnen“ konnte nicht aktiviert werden: %@";
 "Couldn't disable launch at login: %@" = "„Bei der Anmeldung öffnen“ konnte nicht deaktiviert werden: %@";
 "Notifications are off" = "Mitteilungen sind deaktiviert";
-"You won't hear when a reset is announced or lands." = "Du erfährst nicht, wenn ein Reset angekündigt wird oder eintrifft.";
+"You won't hear when a reset is announced or lands." = "Du erfährst nicht, wenn eine Zurücksetzung angekündigt wird oder eintrifft.";
 "Open Notification Settings" = "Mitteilungseinstellungen öffnen";
 "Notify me about" = "Benachrichtigen bei";
 "Announced" = "Ankündigung";
@@ -42,17 +42,17 @@
 "Strong" = "Hoch";
 
 /* Reset types */
-"Reset" = "Reset";
-"Banked reset" = "Reserve-Reset";
-"reset" = "Reset";
-"banked reset" = "Reserve-Reset";
+"Reset" = "Zurücksetzung";
+"Banked reset" = "Gesammelte Zurücksetzung";
+"reset" = "Zurücksetzung";
+"banked reset" = "gesammelte Zurücksetzung";
 
 /* Notifications */
 "Codex %@ announced" = "Codex: %@ angekündigt";
 "Codex %@ rescheduled" = "Codex: %@ verschoben";
-"Codex %@ landed" = "Codex: %@ ist da";
+"Codex %@ landed" = "Codex: %@ eingetroffen";
 "Your usage limits are back." = "Deine Nutzungslimits sind zurückgesetzt.";
-"That's reset #%lld 🎉" = "Das ist Reset Nr. %lld 🎉";
+"That's reset #%lld 🎉" = "Das ist die Zurücksetzung Nr. %lld 🎉";
 "Codex %@ in %lld minutes" = "Codex: %@ in %lld Minuten";
 
 /* Menu bar countdown: 45m, 1h 59m, 9h, 3d, due */
@@ -74,22 +74,22 @@
 "%lld days" = "%lld Tagen";
 "%@, offline, %@" = "%1$@, offline, %2$@";
 "%@, offline" = "%@, offline";
-"checking for resets" = "Resets werden geprüft";
-"no reset announced" = "kein Reset angekündigt";
-"reset announced, time not given yet" = "Reset angekündigt, Uhrzeit noch nicht bekannt";
-"reset due" = "Reset jetzt fällig";
-"reset in %@" = "Reset in %@";
+"checking for resets" = "Zurücksetzungen werden geprüft";
+"no reset announced" = "keine Zurücksetzung angekündigt";
+"reset announced, time not given yet" = "Zurücksetzung angekündigt, Uhrzeit noch nicht bekannt";
+"reset due" = "Zurücksetzung jetzt fällig";
+"reset in %@" = "Zurücksetzung in %@";
 
 /* Shortcuts and Siri (phrases are in AppShortcuts.strings) */
-"Get Next Codex Reset" = "Nächsten Codex-Reset abrufen";
-"Returns the pending Codex reset, or nothing when no reset is announced." = "Gibt den anstehenden Codex-Reset zurück, oder nichts, wenn kein Reset angekündigt ist.";
-"Next Codex Reset" = "Nächster Codex-Reset";
-"The next Codex %@ is %@, in %@." = "Nächster %1$@ von Codex: %2$@, in %3$@.";
-"A Codex %@ was due %@ and hasn't landed yet." = "Ein %1$@ von Codex war für %2$@ geplant und ist noch nicht eingetroffen.";
-"A Codex %@ is announced, but its time isn't given yet." = "Ein %@ von Codex ist angekündigt, aber die Uhrzeit ist noch nicht bekannt.";
-"No Codex reset is announced." = "Kein Codex-Reset angekündigt.";
-"Codex Reset Radar hasn't loaded the reset status yet. Try again in a moment." = "Codex Reset Radar hat den Reset-Status noch nicht geladen. Versuche es gleich noch einmal.";
-"Codex Reset" = "Codex-Reset";
+"Get Next Codex Reset" = "Nächste Codex-Zurücksetzung abrufen";
+"Returns the pending Codex reset, or nothing when no reset is announced." = "Gibt die anstehende Codex-Zurücksetzung zurück, oder nichts, wenn keine Zurücksetzung angekündigt ist.";
+"Next Codex Reset" = "Nächste Codex-Zurücksetzung";
+"The next Codex %@ is %@, in %@." = "Nächste %1$@ von Codex: %2$@, in %3$@.";
+"A Codex %@ was due %@ and hasn't landed yet." = "Eine %1$@ von Codex war für %2$@ geplant und ist noch nicht eingetroffen.";
+"A Codex %@ is announced, but its time isn't given yet." = "Eine %@ von Codex ist angekündigt, aber die Uhrzeit ist noch nicht bekannt.";
+"No Codex reset is announced." = "Keine Codex-Zurücksetzung angekündigt.";
+"Codex Reset Radar hasn't loaded the reset status yet. Try again in a moment." = "Codex Reset Radar hat den Status der Zurücksetzungen noch nicht geladen. Versuche es gleich noch einmal.";
+"Codex Reset" = "Codex-Zurücksetzung";
 "Scheduled For" = "Geplant für";
 "Scheduled for %@" = "Geplant für %@";
 "Type" = "Typ";
