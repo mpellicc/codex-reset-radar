@@ -4,6 +4,27 @@ All notable changes to this project are documented here. The format follows
 [Conventional Commits](https://www.conventionalcommits.org/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.11.0](https://github.com/mpellicc/codex-reset-radar/compare/v0.10.2...v0.11.0) (2026-10-23)
+
+
+### Features
+
+* translate the app into French ([#93](https://github.com/mpellicc/codex-reset-radar/issues/93)) ([5cad8b4](https://github.com/mpellicc/codex-reset-radar/commit/5cad8b46c547e66c2e4134086f884b5ad29e8d7f))
+* translate the app into German ([#91](https://github.com/mpellicc/codex-reset-radar/issues/91)) ([1b7efaf](https://github.com/mpellicc/codex-reset-radar/commit/1b7efafca8f51fd84578a03c660a595193853e12))
+* translate the app into Simplified Chinese ([#92](https://github.com/mpellicc/codex-reset-radar/issues/92)) ([fca750b](https://github.com/mpellicc/codex-reset-radar/commit/fca750bd2310708cc7b931b36dfe7e2119de335d))
+* translate the app into Spanish ([#90](https://github.com/mpellicc/codex-reset-radar/issues/90)) ([f2d3767](https://github.com/mpellicc/codex-reset-radar/commit/f2d37679f4bd15d55d43ec9e77032ffaafa55910))
+
+
+### Bug Fixes
+
+* correct panel layout and compact menu bar spacing ([#97](https://github.com/mpellicc/codex-reset-radar/issues/97)) ([7a8e7cd](https://github.com/mpellicc/codex-reset-radar/commit/7a8e7cd3e60b053f44c5e2cb21a55d1d15d80dc4))
+* use the Codex app's Italian terms for resets ([#100](https://github.com/mpellicc/codex-reset-radar/issues/100)) ([e661c05](https://github.com/mpellicc/codex-reset-radar/commit/e661c05e9d6b886b9869fe1eecd10a195979cb80))
+
+
+### Documentation
+
+* document the new languages and where translations take their terms ([#101](https://github.com/mpellicc/codex-reset-radar/issues/101)) ([a4167a2](https://github.com/mpellicc/codex-reset-radar/commit/a4167a2c7a0eddb9874bbeb8b6622a3ac3a47ede))
+
 ## [0.10.2](https://github.com/mpellicc/codex-reset-radar/compare/v0.10.1...v0.10.2) (2026-10-23)
 
 
