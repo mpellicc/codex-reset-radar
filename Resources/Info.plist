@@ -13,6 +13,7 @@
 		<string>es</string>
 		<string>de</string>
 		<string>zh-Hans</string>
+		<string>fr</string>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>CodexResetRadar</string>
