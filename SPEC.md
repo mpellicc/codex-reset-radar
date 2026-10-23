@@ -104,7 +104,7 @@ poll; the countdown stays next to it. VoiceOver reads the item as a sentence, fo
 
 ## Tech
 
-- Swift + SwiftUI `MenuBarExtra`, macOS 13+, Swift Package. Sparkle is its only dependency.
+- Swift + SwiftUI `MenuBarExtra`, macOS 15+, Swift Package. Sparkle is its only dependency.
 - `LSUIElement` (no Dock icon), `UserNotifications`, `SMAppService` for login item.
 - `scripts/build-app.sh` builds a universal binary, assembles the `.app` with `Sparkle.framework`
   in `Contents/Frameworks`, ad-hoc signs it and zips it into `dist/`.
