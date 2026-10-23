@@ -129,9 +129,10 @@ reset status yet". A status that is stale because later polls failed is still an
 
 **Easter eggs.** Two hidden touches, deliberately left out of the README. Keep them.
 
-- Typing `codex` (any case, no modifiers) while the panel is open makes the small radar left of the panel title
-  turn once and plays the system "Ping" sound at the user's normal volume. Under Reduce Motion, the sound alone.
-  Only the letters c, o, d, e, x are taken; every other key reaches the focused control as usual.
+- Typing `codex` (any case, no modifiers) while the panel is open makes the radar left of the panel title (the
+  menu bar symbol) sweep once and plays the system "Ping" sound at the user's normal volume. Under Reduce Motion,
+  the sound alone. Only the letters c, o, d, e, x are taken; every other key reaches the focused control as usual.
+  A half-typed word is dropped when the panel closes.
 - When the reset that landed makes `stats.total` 100, 150, 200, … the landed notification adds a line,
   "That's reset #100 🎉". `stats.total` counts the latest reset (it equals the number of resets the API lists),
   so it already includes the one that landed. Announcements, reminders and the panel never mention it. The landed
