@@ -19,9 +19,15 @@ cp "$BIN_DIR/$EXECUTABLE" "$APP/Contents/MacOS/$EXECUTABLE"
 # Sparkle arrives signed by its developers; ad-hoc signing the app below leaves that signature alone.
 ditto "$BIN_DIR/Sparkle.framework" "$APP/Contents/Frameworks/Sparkle.framework"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
-cp Resources/AppIcon.icns Resources/RadarMenuBarTemplate.png Resources/RadarMenuBarTemplate@2x.png \
-    "$APP/Contents/Resources/"
+cp Resources/AppIcon.icns "$APP/Contents/Resources/"
 cp -R Resources/*.lproj "$APP/Contents/Resources/"
+# The menu bar radar is a custom SF Symbol (Resources/Assets.xcassets, drawn by scripts/menu-bar-symbol.py)
+# with its rings and needle on separate layers, so each can animate on its own. Xcode compiles asset
+# catalogs into Assets.car; SwiftPM doesn't, so run the same tool.
+xcrun actool Resources/Assets.xcassets --compile "$APP/Contents/Resources" --platform macosx \
+    --minimum-deployment-target "$(/usr/libexec/PlistBuddy -c "Print LSMinimumSystemVersion" Resources/Info.plist)" \
+    --errors --warnings --output-format human-readable-text
+test -f "$APP/Contents/Resources/Assets.car"
 
 # Shortcuts and Siri find the app's App Intents through Contents/Resources/Metadata.appintents.
 # Xcode extracts it at build time; SwiftPM doesn't, so run the same tool on what the compiler left behind.
