@@ -19,8 +19,8 @@
 "Running from a temporary location" = "正在从临时位置运行";
 "Quit, move Codex Reset Radar to Applications and open it from there. Launch at login is disabled until then, because it would point at a path that disappears." = "请退出，将 Codex Reset Radar 移到“应用程序”文件夹，然后从那里打开。在此之前，“登录时打开”已停用，因为它会指向一个即将消失的路径。";
 "Launch at login" = "登录时打开";
-"Open Login Items" = "打开登录项";
-"Approve Codex Reset Radar in System Settings → General → Login Items." = "请在“系统设置”→“通用”→“登录项”中允许 Codex Reset Radar。";
+"Open Login Items" = "打开登录项与扩展";
+"Approve Codex Reset Radar in System Settings → General → Login Items." = "请在“系统设置”→“通用”→“登录项与扩展”中允许 Codex Reset Radar。";
 "Couldn't enable launch at login: %@" = "无法启用“登录时打开”：%@";
 "Couldn't disable launch at login: %@" = "无法停用“登录时打开”：%@";
 "Notifications are off" = "通知已关闭";
