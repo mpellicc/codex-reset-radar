@@ -11,7 +11,7 @@
 "Checking…" = "正在检查…";
 "Couldn't reach codex-resets.com" = "无法连接 codex-resets.com";
 "Last reset %@" = "上次重置：%@";
-"Every %.1f days on average" = "平均每 %.1f 天一次";
+"Every %.1f days on average" = "平均每%.1f天一次";
 "Checked %@" = "检查于 %@";
 "Data from codex-resets.com" = "数据来自 codex-resets.com";
 "Quit" = "退出";
@@ -31,7 +31,7 @@
 "Reminder" = "提醒";
 "Landed" = "生效";
 "Reminder lead time" = "提前提醒时间";
-"%lld min" = "%lld 分钟";
+"%lld min" = "%lld分钟";
 
 /* Panel: watch forecast */
 "Forecast" = "预测";
@@ -53,7 +53,7 @@
 "Codex %@ landed" = "Codex %@已生效";
 "Your usage limits are back." = "你的使用额度已恢复。";
 "That's reset #%lld 🎉" = "这是第 %lld 次重置 🎉";
-"Codex %@ in %lld minutes" = "Codex %@将在 %lld 分钟后生效";
+"Codex %@ in %lld minutes" = "Codex %@将在%lld分钟后生效";
 
 /* Menu bar countdown: 45m, 1h 59m, 9h, 3d, due */
 "due" = "到点";
@@ -66,11 +66,11 @@
 
 /* VoiceOver */
 "spoken-due" = "已到预定时间";
-"1 minute" = "1 分钟";
-"%lld minutes" = "%lld 分钟";
-"1 hour" = "1 小时";
-"%lld hours" = "%lld 小时";
-"%lld days" = "%lld 天";
+"1 minute" = "1分钟";
+"%lld minutes" = "%lld分钟";
+"1 hour" = "1小时";
+"%lld hours" = "%lld小时";
+"%lld days" = "%lld天";
 "%@, offline, %@" = "%@，离线，%@";
 "%@, offline" = "%@，离线";
 "checking for resets" = "正在检查重置";
