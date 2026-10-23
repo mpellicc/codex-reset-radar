@@ -140,15 +140,16 @@ reset status yet". A status that is stale because later polls failed is still an
 
 ## Tech
 
-- Swift + SwiftUI, macOS 15+, Swift Package. Sparkle is its only dependency. The menu bar item is an
-  `NSStatusItem` hosting SwiftUI, with an `NSPanel` for the panel, so symbol effects can animate
-  (ADR 0003). The radar symbol is drawn by `scripts/menu-bar-symbol.py` into `Resources/Assets.xcassets`.
+- Swift + SwiftUI, macOS 15+. A Swift Package for code and tests; the app bundle is built by
+  Xcode. Sparkle is its only dependency. The menu bar item is an `NSStatusItem` hosting SwiftUI, with an
+  `NSPanel` for the panel, so symbol effects can animate (ADR 0004). The radar symbol is drawn by
+  `scripts/menu-bar-symbol.py` into `Resources/Assets.xcassets`, which Xcode compiles with the app.
 - `LSUIElement` (no Dock icon), `UserNotifications`, `SMAppService` for login item.
-- `scripts/build-app.sh` builds a universal binary, assembles the `.app` with `Sparkle.framework`
-  in `Contents/Frameworks`, compiles `Resources/Assets.xcassets` with `actool`, ad-hoc signs it and zips it into `dist/`. It builds with Swift Build
-  (`--build-system swiftbuild`) and runs Xcode's `appintentsmetadataprocessor` and `appintentsnltrainingprocessor`
-  to put the App Intents metadata (`Metadata.appintents`) and Siri phrase assets in the bundle, which plain
-  SwiftPM doesn't do.
+- `scripts/build-app.sh` generates an Xcode project from `project.yml` with XcodeGen and builds the
+  universal, ad-hoc signed `.app` with `xcodebuild`: Xcode embeds `Sparkle.framework`, extracts the App Intents
+  metadata (`Metadata.appintents`) and records the real SDK version, which macOS reads to give the app its
+  current look. The script checks those, then zips the app into `dist/`. Sparkle's version comes from
+  `Package.resolved` (ADR 0003).
 - `scripts/make-appcast.sh` signs the zip with the EdDSA private key and writes `dist/appcast.xml`;
   the release job attaches both to the GitHub release.
 

@@ -10,8 +10,8 @@ Layers, bottom to top:
   0-2  centre dot, inner ring, outer ring: variable colour lights them from the centre out.
   3    needle and blip.
 The outer ring is open around the blip. It rotates with the needle around the radar's centre (the
-rotate anchor), so the opening stays around the blip and reads as the blip's own halo. scripts/build-app.sh compiles the catalog; the SF Symbols app opens
-the SVG for a preview.
+rotate anchor), so the opening stays around the blip and reads as the blip's own halo. Xcode compiles
+the catalog with the app (scripts/build-app.sh); the SF Symbols app opens the SVG for a preview.
 """
 import math
 import sys

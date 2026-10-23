@@ -1,68 +1,44 @@
 #!/usr/bin/env bash
 # Builds a universal, ad-hoc signed "Codex Reset Radar.app" and a zip for sharing, in dist/.
+# The app is built by Xcode from project.yml (XcodeGen), so the bundle, App Intents metadata, Siri phrase
+# assets and the SDK version recorded in the binary come out the way Xcode makes them. See docs/adr/0003.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 APP_NAME="Codex Reset Radar"
 EXECUTABLE="CodexResetRadar"
 VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" Resources/Info.plist)
-# Swift Build (not the native build system) emits the constant values the App Intents step below reads.
-BUILD_FLAGS=(-c release --arch arm64 --arch x86_64 --build-system swiftbuild)
+PROJECT="$EXECUTABLE.xcodeproj"
+DERIVED=.build/xcode
 
-swift build "${BUILD_FLAGS[@]}"
-BIN_DIR=$(swift build "${BUILD_FLAGS[@]}" --show-bin-path)
+xcodegen generate --quiet
+# Package.resolved is the one pin for Sparkle; give the generated project the same one and hold Xcode to it.
+mkdir -p "$PROJECT/project.xcworkspace/xcshareddata/swiftpm"
+cp Package.resolved "$PROJECT/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+xcodebuild build -quiet \
+    -project "$PROJECT" -scheme "$EXECUTABLE" -configuration Release \
+    -destination "generic/platform=macOS" \
+    -derivedDataPath "$DERIVED" \
+    -onlyUsePackageVersionsFromResolvedFile
 
 APP="dist/$APP_NAME.app"
 rm -rf dist
-mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources" "$APP/Contents/Frameworks"
-cp "$BIN_DIR/$EXECUTABLE" "$APP/Contents/MacOS/$EXECUTABLE"
-# Sparkle arrives signed by its developers; ad-hoc signing the app below leaves that signature alone.
-ditto "$BIN_DIR/Sparkle.framework" "$APP/Contents/Frameworks/Sparkle.framework"
-cp Resources/Info.plist "$APP/Contents/Info.plist"
-cp Resources/AppIcon.icns "$APP/Contents/Resources/"
-cp -R Resources/*.lproj "$APP/Contents/Resources/"
-# The menu bar radar is a custom SF Symbol (Resources/Assets.xcassets, drawn by scripts/menu-bar-symbol.py)
-# with its rings and needle on separate layers, so each can animate on its own. Xcode compiles asset
-# catalogs into Assets.car; SwiftPM doesn't, so run the same tool.
-xcrun actool Resources/Assets.xcassets --compile "$APP/Contents/Resources" --platform macosx \
-    --minimum-deployment-target "$(/usr/libexec/PlistBuddy -c "Print LSMinimumSystemVersion" Resources/Info.plist)" \
-    --errors --warnings --output-format human-readable-text
-test -f "$APP/Contents/Resources/Assets.car"
+mkdir -p dist
+ditto "$DERIVED/Build/Products/Release/$EXECUTABLE.app" "$APP"
 
-# Shortcuts and Siri find the app's App Intents through Contents/Resources/Metadata.appintents.
-# Xcode extracts it at build time; SwiftPM doesn't, so run the same tool on what the compiler left behind.
-# The intermediates layout differs between Swift Build versions, so find the arm64 objects of the release build.
-INTENTS_OBJECTS=$(dirname "$(find .build -path "*Release*arm64*" -name "$EXECUTABLE.SwiftFileList" | head -1)")
-INTENTS_TMP=$(mktemp -d)
-find "$PWD/$INTENTS_OBJECTS" -name "*.swiftconstvalues" > "$INTENTS_TMP/ConstValuesList"
-if [ ! -s "$INTENTS_TMP/ConstValuesList" ]; then
-    echo "error: no .swiftconstvalues for $EXECUTABLE (looked in '$INTENTS_OBJECTS')" >&2
-    find .build -name "*.SwiftFileList" -o -name "*.swiftconstvalues" >&2
+# macOS picks the app's look from the SDK version recorded in the binary: anything below 26 gets the
+# pre-Liquid Glass windows and controls. Xcode records it right; fail loudly if that ever changes.
+SDK_VERSION=$(xcrun --sdk macosx --show-sdk-version)
+if vtool -show-build "$APP/Contents/MacOS/$EXECUTABLE" | awk '$1 == "sdk"' | grep -qv " $SDK_VERSION\$"; then
+    echo "error: $EXECUTABLE doesn't record SDK $SDK_VERSION" >&2
+    vtool -show-build "$APP/Contents/MacOS/$EXECUTABLE" >&2
     exit 1
 fi
-MIN_MACOS=$(/usr/libexec/PlistBuddy -c "Print LSMinimumSystemVersion" Resources/Info.plist)
-xcrun appintentsmetadataprocessor --quiet-warnings \
-    --output "$APP/Contents/Resources" \
-    --toolchain-dir "$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain" \
-    --module-name "$EXECUTABLE" \
-    --sdk-root "$(xcrun --sdk macosx --show-sdk-path)" \
-    --xcode-version "$(xcodebuild -version | awk '/Build version/ { print $3 }')" \
-    --platform-family macOS \
-    --deployment-target "$MIN_MACOS" \
-    --target-triple "arm64-apple-macos$MIN_MACOS" \
-    --source-file-list "$INTENTS_OBJECTS/$EXECUTABLE.SwiftFileList" \
-    --swift-const-vals-list "$INTENTS_TMP/ConstValuesList"
+test "$(lipo -archs "$APP/Contents/MacOS/$EXECUTABLE")" = "x86_64 arm64"
+# Shortcuts and Siri find the app's App Intents through these.
 test -f "$APP/Contents/Resources/Metadata.appintents/extract.actionsdata"
-# Siri matches the App Shortcut phrases (it.lproj/AppShortcuts.strings for Italian) through these trained assets.
-xcrun appintentsnltrainingprocessor --archive-ssu-assets \
-    --extracted-metadata-path "$APP/Contents/Resources/Metadata.appintents" \
-    --infoplist-path "$APP/Contents/Info.plist" \
-    --temp-dir-path "$INTENTS_TMP" \
-    --bundle-id "$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" Resources/Info.plist)" \
-    --product-path "$APP/Contents/Resources"
-rm -rf "$INTENTS_TMP"
+codesign --verify --strict "$APP"
 
-codesign --force --sign - --timestamp=none "$APP"
 ditto -c -k --keepParent "$APP" "dist/$EXECUTABLE-$VERSION.zip"
 
 echo "Built $APP"
