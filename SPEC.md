@@ -5,7 +5,7 @@ It does one job: watch [codex-resets.com](https://codex-resets.com) and notify.
 
 ## Scope (v1)
 
-- Announcements only. The AI "watch" forecast from the API is ignored.
+- Notifies about announcements only. The AI watch forecast is shown in the panel, never notified.
 - No backend, no accounts. Each Mac polls the public API directly.
 - Distributed as an ad-hoc signed `.app` in a zip. No Apple Developer account,
   so colleagues approve it once via System Settings → Privacy & Security → Open Anyway.
@@ -21,6 +21,9 @@ Fields used:
   A passed `scheduled_for` does not mean the reset happened.
 - `data.latest_reset.announced_at`: the last reset that landed.
 - `data.stats.avg_interval_days`.
+- `data.active_watch`: `level` (`elevated` | `strong`), `reset_chance_percent` (nullable),
+  `forecast_window`, `expires_at`, `text`, `source.url`. Null when there is no forecast. Decoded
+  leniently: a watch that is missing, malformed or has an unknown level reads as none and never fails the poll.
 
 Terms: the data must be credited with a link to codex-resets.com wherever it is shown.
 
@@ -93,6 +96,12 @@ poll; the countdown stays next to it. VoiceOver reads the item as a sentence, fo
 - Pending reset: type, local date and time, relative time, the announcement text,
   link to the post. With no date: "time not given yet". Past due: "waiting for it to land".
 - Otherwise: "No reset announced".
+- Forecast: the watch forecast in its own quieter section, labelled "Forecast" with a `sparkles` icon,
+  all in the secondary colour and never in the pending-reset styling. It shows the level ("Elevated" or
+  "Strong"), the chance when given ("40% chance"), `forecast_window` and the text as the API gives them,
+  a "View source" link, and the line "AI guess, not an announcement". Hidden once `expires_at` has passed
+  and whenever `scheduled_reset` is not null. It never notifies and never changes the menu bar icon or
+  countdown, which keep meaning "announced".
 - Last reset (relative) and average interval.
 - Last checked time, error if the last poll failed.
 - Launch at login toggle, then under a small "Notify me about" heading three checkboxes:
@@ -129,4 +138,4 @@ reset status yet". A status that is stale because later polls failed is still an
 
 ## Out of scope for v1
 
-Watch forecast, Slack, settings beyond launch at login and the notification switches.
+Notifying about the watch forecast, Slack, settings beyond launch at login and the notification switches.

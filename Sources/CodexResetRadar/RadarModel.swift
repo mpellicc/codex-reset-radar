@@ -63,6 +63,9 @@ final class RadarModel: ObservableObject {
 
     var pending: ScheduledReset? { status?.scheduledReset }
 
+    /// The watch forecast to show in the panel. Re-read on every minute tick, so an expired one goes away.
+    var forecast: Watch? { status?.visibleWatch(now: now) }
+
     func setNotificationPreferences(_ preferences: NotificationPreferences) {
         notifier.update(preferences)
         notificationPreferences = preferences

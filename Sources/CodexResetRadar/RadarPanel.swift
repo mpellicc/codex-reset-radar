@@ -14,6 +14,9 @@ struct RadarPanel: View {
             Divider()
             NotificationsOffWarning(access: model.notificationAccess)
             announcement
+            if let watch = model.forecast {
+                WatchForecast(watch: watch)
+            }
             Divider()
             history
             Divider()
@@ -130,6 +133,34 @@ private struct NoFocusEffect: ViewModifier {
 extension Color {
     /// Brand accent, #267CFF.
     fileprivate static let signalBlue = Color(red: 0x26 / 255, green: 0x7C / 255, blue: 0xFF / 255)
+}
+
+/// The source's AI guess that a reset may be coming. Deliberately quieter than an announcement:
+/// secondary colour, its own icon, and a line saying it is a guess.
+private struct WatchForecast: View {
+    let watch: Watch
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Label("Forecast", systemImage: "sparkles")
+                .font(.subheadline.weight(.semibold))
+            if let chance = watch.resetChancePercent {
+                Text("\(watch.levelLabel), \(chance)% chance")
+            } else {
+                Text(watch.levelLabel)
+            }
+            Text(verbatim: watch.forecastWindow)
+            Text("“\(watch.text)”")
+                .italic()
+                .fixedSize(horizontal: false, vertical: true)
+            if let url = watch.source.url {
+                Link("View source", destination: url).font(.callout)
+            }
+            Text("AI guess, not an announcement")
+                .font(.caption)
+        }
+        .foregroundStyle(.secondary)
+    }
 }
 
 private struct TranslocationWarning: View {
