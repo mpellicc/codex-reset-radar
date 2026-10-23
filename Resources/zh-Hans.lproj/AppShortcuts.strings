@@ -1,0 +1,4 @@
+/* Simplified Chinese Siri and Spotlight phrases for the App Shortcuts in NextResetIntent.swift. Keys are the English phrases. */
+"When is the next Codex reset in ${applicationName}" = "${applicationName}中的下一次 Codex 重置是什么时候";
+"Get the next Codex reset from ${applicationName}" = "从${applicationName}获取下一次 Codex 重置";
+"Next Codex reset in ${applicationName}" = "${applicationName}中的下一次 Codex 重置";
