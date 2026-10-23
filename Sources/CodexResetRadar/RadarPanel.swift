@@ -156,22 +156,35 @@ private struct TranslocationWarning: View {
 }
 
 /// A setting as macOS System Settings shows it: the label on the left, a switch on the right edge.
-private struct SwitchRow: View {
+private struct SwitchRow<Accessory: View>: View {
     private let title: LocalizedStringKey
     @Binding private var isOn: Bool
+    private let accessory: Accessory
 
-    init(_ title: LocalizedStringKey, isOn: Binding<Bool>) {
+    /// `accessory` sits right after the label, before the switch.
+    init(_ title: LocalizedStringKey, isOn: Binding<Bool>, @ViewBuilder accessory: () -> Accessory) {
         self.title = title
         _isOn = isOn
+        self.accessory = accessory()
     }
 
     var body: some View {
         Toggle(isOn: $isOn) {
-            Text(title).frame(maxWidth: .infinity, alignment: .leading)
+            HStack {
+                Text(title)
+                accessory
+                Spacer(minLength: 0)
+            }
         }
         .toggleStyle(.switch)
         // System Settings uses the mini switch; the regular one dwarfs the panel's text.
         .controlSize(.mini)
+    }
+}
+
+extension SwitchRow where Accessory == EmptyView {
+    init(_ title: LocalizedStringKey, isOn: Binding<Bool>) {
+        self.init(title, isOn: isOn) { EmptyView() }
     }
 }
 
@@ -244,9 +257,30 @@ private struct NotificationSwitches: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
             SwitchRow("Announced", isOn: binding(\.announced))
-            SwitchRow("Reminder", isOn: binding(\.reminder))
+            SwitchRow("Reminder", isOn: binding(\.reminder)) {
+                Picker("Reminder lead time", selection: leadMinutes) {
+                    ForEach(Reminder.leadMinuteChoices, id: \.self) { minutes in
+                        Text("\(minutes) min").tag(minutes)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .fixedSize()
+                .controlSize(.small)
+                .disabled(!model.notificationPreferences.reminder)
+            }
             SwitchRow("Landed", isOn: binding(\.landed))
         }
+    }
+
+    private var leadMinutes: Binding<Int> {
+        Binding(
+            get: { model.notificationPreferences.reminderLeadMinutes },
+            set: { minutes in
+                var preferences = model.notificationPreferences
+                preferences.reminderLeadMinutes = minutes
+                model.setNotificationPreferences(preferences)
+            })
     }
 
     private func binding(_ kind: WritableKeyPath<NotificationPreferences, Bool>) -> Binding<Bool> {

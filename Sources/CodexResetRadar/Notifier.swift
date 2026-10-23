@@ -60,8 +60,8 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
         }
     }
 
-    /// Applies new notification switches right away. The reminder is the only kind with something
-    /// pending in the system, so it is re-synced here instead of at the next poll.
+    /// Applies new notification switches and lead time right away. The reminder is the only kind with
+    /// something pending in the system, so it is re-synced here instead of at the next poll.
     func update(_ preferences: NotificationPreferences) {
         self.preferences = preferences
         preferencesStore.save(preferences)
@@ -134,7 +134,7 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
         }
 
         let content = UNMutableNotificationContent()
-        content.title = String(localized: "Codex \(reset.typeNoun) in 15 minutes")
+        content.title = String(localized: "Codex \(reset.typeNoun) in \(preferences.reminderLeadMinutes) minutes")
         content.subtitle = Format.when(reminder.scheduledFor)
         content.body = reset.text
         content.sound = .default
