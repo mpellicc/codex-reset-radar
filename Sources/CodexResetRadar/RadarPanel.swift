@@ -157,10 +157,10 @@ private struct TranslocationWarning: View {
 
 /// A setting as macOS System Settings shows it: the label on the left, a switch on the right edge.
 private struct SwitchRow: View {
-    private let title: String
+    private let title: LocalizedStringKey
     @Binding private var isOn: Bool
 
-    init(_ title: String, isOn: Binding<Bool>) {
+    init(_ title: LocalizedStringKey, isOn: Binding<Bool>) {
         self.title = title
         _isOn = isOn
     }
