@@ -127,6 +127,16 @@ app's process and reads the status the app already has; it never polls. Right af
 10 seconds for the launch poll; if there is still no status (the poll failed), it fails with "hasn't loaded the
 reset status yet". A status that is stale because later polls failed is still answered from.
 
+**Easter eggs.** Two hidden touches, deliberately left out of the README. Keep them.
+
+- Typing `codex` (any case, no modifiers) while the panel is open makes the small radar left of the panel title
+  turn once and plays the system "Ping" sound at the user's normal volume. Under Reduce Motion, the sound alone.
+  Only the letters c, o, d, e, x are taken; every other key reaches the focused control as usual.
+- When the reset that landed makes `stats.total` 100, 150, 200, … the landed notification adds a line,
+  "That's reset #100 🎉". `stats.total` counts the latest reset (it equals the number of resets the API lists),
+  so it already includes the one that landed. Announcements, reminders and the panel never mention it. The landed
+  notification fires once per `latest_reset.id`, so a milestone is never repeated. An unknown total is no milestone.
+
 ## Tech
 
 - Swift + SwiftUI, macOS 15+, Swift Package. Sparkle is its only dependency. The menu bar item is an

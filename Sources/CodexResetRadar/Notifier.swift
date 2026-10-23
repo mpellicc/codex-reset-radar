@@ -71,7 +71,7 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
     func process(_ status: StatusData) {
         lastScheduledReset = status.scheduledReset
         announceIfNew(status.scheduledReset)
-        notifyIfLanded(status.latestReset)
+        notifyIfLanded(status.latestReset, total: status.stats.total)
         syncReminder(for: status.scheduledReset)
     }
 
@@ -102,7 +102,7 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
         Log.notify.notice("announcement sent for reset \(reset.id, privacy: .public)")
     }
 
-    private func notifyIfLanded(_ latest: Reset?) {
+    private func notifyIfLanded(_ latest: Reset?, total: Int?) {
         guard let recorded = landings.landedIfNew(latest) else { return }
         guard let landed = preferences.allowing(landed: recorded) else {
             Log.notify.notice(
@@ -114,6 +114,10 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
         let content = UNMutableNotificationContent()
         content.title = String(localized: "Codex \(landed.typeNoun) landed")
         content.body = String(localized: "Your usage limits are back.")
+        // `total` comes from the same response as `latest`, so it already counts the reset that landed.
+        if let milestone = ResetMilestone.reached(total: total) {
+            content.body += "\n" + String(localized: "That's reset #\(milestone) 🎉")
+        }
         content.sound = .default
         content.userInfo = ["url": Self.homepage.absoluteString]
         center.add(UNNotificationRequest(identifier: "landed-\(landed.id)", content: content, trigger: nil))

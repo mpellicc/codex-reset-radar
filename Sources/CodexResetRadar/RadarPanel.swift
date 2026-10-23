@@ -6,6 +6,10 @@ struct RadarPanel: View {
     @EnvironmentObject private var model: RadarModel
     @EnvironmentObject private var updater: Updater
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var sweeps = 0
+    @State private var codexWord = SecretWord("codex")
+
     private let isTranslocated = Translocation.isTranslocated(bundleURL: Bundle.main.bundleURL)
 
     var body: some View {
@@ -28,10 +32,31 @@ struct RadarPanel: View {
         .fixedSize(horizontal: false, vertical: true)
         .tint(.signalBlue)
         .modifier(NoFocusEffect())
+        .onKeyPress(phases: .down) { press in
+            // Only the letters of the word are taken, so every other key reaches the focused control.
+            guard press.modifiers.isEmpty, let letter = press.characters.first, codexWord.isPart(of: letter) else {
+                return .ignored
+            }
+            if codexWord.type(letter) {
+                ping()
+            }
+            return .handled
+        }
+        .onDisappear { codexWord.reset() }
+    }
+
+    /// Easter egg: typing "codex" sweeps the radar once and plays a short system sound.
+    /// Under Reduce Motion, the sound alone.
+    private func ping() {
+        NSSound(named: "Ping")?.play()
+        if !reduceMotion {
+            sweeps += 1
+        }
     }
 
     private var header: some View {
-        HStack {
+        HStack(spacing: 6) {
+            RadarSweep(sweeps: sweeps)
             Text("Codex Reset Radar").font(.headline)
             Spacer()
             Button {
@@ -117,6 +142,68 @@ struct RadarPanel: View {
                 Spacer()
                 Button("Quit") { NSApplication.shared.terminate(nil) }
                     .keyboardShortcut("q")
+            }
+        }
+    }
+}
+
+/// Matches a word typed one letter at a time, ignoring case. It remembers only how far into the word it is.
+private struct SecretWord {
+    private let letters: [Character]
+    private var matched = 0
+
+    init(_ word: String) {
+        letters = Array(word.lowercased())
+    }
+
+    /// Whether `letter` is one this word can use, so any other key is left alone.
+    func isPart(of letter: Character) -> Bool {
+        letters.contains(Character(letter.lowercased()))
+    }
+
+    /// Takes the next letter; true when it completes the word.
+    mutating func type(_ letter: Character) -> Bool {
+        let letter = Character(letter.lowercased())
+        if letter == letters[matched] {
+            matched += 1
+        } else {
+            matched = letter == letters[0] ? 1 : 0
+        }
+        guard matched == letters.count else { return false }
+        matched = 0
+        return true
+    }
+
+    mutating func reset() {
+        matched = 0
+    }
+}
+
+/// A small radar next to the title: two rings and a needle that makes one full turn each time `sweeps` grows.
+private struct RadarSweep: View {
+    let sweeps: Int
+    @State private var angle = 0.0
+
+    var body: some View {
+        ZStack {
+            Circle().stroke(lineWidth: 1.2)
+            Circle().stroke(lineWidth: 1.2).scaleEffect(0.5)
+            // Its own 16-point frame, so the turn is about the ring's centre.
+            Capsule()
+                .frame(width: 1.6, height: 8)
+                .offset(y: -4)
+                .frame(width: 16, height: 16)
+                .rotationEffect(.degrees(angle))
+                .foregroundStyle(.tint)
+        }
+        .foregroundStyle(.secondary)
+        .frame(width: 16, height: 16)
+        .accessibilityHidden(true)
+        .onChange(of: sweeps) {
+            withAnimation(.linear(duration: 1.2)) {
+                angle = 360
+            } completion: {
+                angle = 0
             }
         }
     }
