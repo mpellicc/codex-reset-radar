@@ -57,6 +57,8 @@
 
 /* Menu bar countdown: 45m, 1h 59m, 9h, 3d, due */
 "due" = "ora";
+/* Menu bar, past due under Reduce Motion (in place of the hourglass) */
+"Now" = "Ora";
 "%lldm" = "%lldm";
 "%lldh %lldm" = "%lldh %lldm";
 "%lldh" = "%lldh";
