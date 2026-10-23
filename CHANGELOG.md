@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows
 [Conventional Commits](https://www.conventionalcommits.org/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.10.2](https://github.com/mpellicc/codex-reset-radar/compare/v0.10.1...v0.10.2) (2026-10-23)
+
+
+### Bug Fixes
+
+* use Xcode Sparkle tools for release signing ([#95](https://github.com/mpellicc/codex-reset-radar/issues/95)) ([59dcedf](https://github.com/mpellicc/codex-reset-radar/commit/59dcedf886816a226bf6c14f370737780878d17d))
+
 ## [0.10.1](https://github.com/mpellicc/codex-reset-radar/compare/v0.10.0...v0.10.1) (2026-10-23)
 
 
