@@ -123,11 +123,7 @@ struct RadarPanel: View {
 /// as if it were selected. Clicking still works; only the ring goes.
 private struct NoFocusEffect: ViewModifier {
     func body(content: Content) -> some View {
-        if #available(macOS 14.0, *) {
-            content.focusEffectDisabled()
-        } else {
-            content
-        }
+        content.focusEffectDisabled()
     }
 }
 

@@ -31,7 +31,7 @@ Or by hand:
 4. Allow notifications when asked.
 5. Click the radar icon in the menu bar and turn on **Launch at login**.
 
-Requires macOS 13 or later.
+Requires macOS 15 or later.
 
 The app keeps itself up to date: it checks once a day, or when you click **Check for Updates…** in the
 panel, and installs new versions in place without another "Open Anyway". Versions 0.7.0 and older
