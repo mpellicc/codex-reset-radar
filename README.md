@@ -5,8 +5,8 @@
 [![Latest release](https://img.shields.io/github/v/release/mpellicc/codex-reset-radar?label=release)](https://github.com/mpellicc/codex-reset-radar/releases/latest)
 [![CI](https://github.com/mpellicc/codex-reset-radar/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mpellicc/codex-reset-radar/actions/workflows/ci.yml)
 
-A tiny macOS menu bar app that pings you when a Codex usage reset is announced,
-with a countdown to when it lands.
+A tiny macOS menu bar app that tells you when a Codex usage reset is announced and when it lands,
+with a countdown to its scheduled time.
 
 Data from [codex-resets.com](https://codex-resets.com).
 
@@ -39,12 +39,28 @@ can't do this, so update from those once by hand.
 
 ## What it does
 
-- Checks codex-resets.com every 15 minutes and after your Mac wakes.
-- When a reset with a date is announced, sends a notification (and another if the time changes).
-- Shows a countdown next to the menu bar icon (`9h`, `1h 59m`, `45m`, `due`) until it lands.
-- Lets you turn announced, reminder and landed notifications on or off separately, from the panel, and choose how long before a reset the reminder comes (5, 15, 30 or 60 minutes).
+- Checks codex-resets.com on launch, every 15 minutes, after your Mac wakes and when the network reconnects. You can also refresh from the panel.
+- Notifies when a reset with a future date is announced or rescheduled, reminds you before it is due, and notifies when a reset lands—even if it wasn't announced first.
+- Shows a countdown next to the menu bar icon (`3d`, `9h`, `1h 59m`, `45m`). Once the scheduled time passes, an hourglass stays until it lands; a passed time alone doesn't mean it happened.
+- Animates the radar when checking, when a reset is near and when it lands. Respects Reduce Motion and provides descriptive VoiceOver labels.
+- Shows a slashed antenna after two consecutive failed checks, with the error in the panel.
+- Shows the source's AI watch forecast when no reset is announced and the forecast hasn't expired. Forecasts never send notifications or change the menu bar countdown.
+- Lets you turn announced, reminder and landed notifications on or off separately, from the panel, and choose how long before a reset the reminder comes (5, 15, 30 or 60 minutes; 15 by default).
 - Notification sound follows macOS: use the per-app "Play sound for notifications" switch in System Settings → Notifications → Codex Reset Radar (the panel's "Open Notification Settings" button takes you there).
-- Speaks your macOS language (English or Italian so far); announcement posts stay in their original wording.
+- Speaks your macOS language (English or Italian so far); announcement posts and forecast text stay in their original wording.
+
+On first launch, an already-announced reset with a future date sends a notification right away.
+The latest reset that already landed is treated as history and doesn't notify.
+
+## Shortcuts and Siri
+
+In Shortcuts, add **Get Next Codex Reset** to get the pending reset's scheduled time (if given),
+type, announcement text and source URL. It returns nothing when no reset is announced.
+You can also ask Siri, "When is the next Codex reset in Codex Reset Radar?"
+
+The action uses the status the app already has, without making another network request.
+If the initial check hasn't finished, it waits up to 10 seconds; if no status is available,
+it asks you to try again. After a later check fails, it can still answer from the last loaded status.
 
 ## Troubleshooting
 
@@ -64,9 +80,24 @@ scripts/build-app.sh
 ```
 
 Produces `dist/Codex Reset Radar.app` and `dist/CodexResetRadar-<version>.zip`.
-Needs Xcode and [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`): the script
-generates `CodexResetRadar.xcodeproj` from `project.yml` and builds the app with `xcodebuild`.
-`swift build`, `swift test` and `swift run` still work from `Package.swift`. See [SPEC.md](SPEC.md) for behaviour.
+Needs Xcode and [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`); CI uses
+Xcode 26.6. The script generates `CodexResetRadar.xcodeproj` from `project.yml` and builds a universal
+app for Apple silicon and Intel with `xcodebuild`, including the resources and App Intents metadata
+needed by Shortcuts and Siri.
+
+For development, `swift build`, `swift test` and `swift run` work from `Package.swift`.
+Use the bundled app to try localization, the custom radar symbol, Shortcuts/Siri and in-app updates;
+`swift run` doesn't include the bundle's resources or start the updater.
+See [SPEC.md](SPEC.md) for behaviour and [CHANGELOG.md](CHANGELOG.md) for release history.
+
+Build/typecheck and lint with the same commands as CI:
+
+```bash
+swift build
+swift format lint --strict --recursive Sources Tests
+```
+
+Run the core tests with `swift test`.
 
 To format the code before committing, run `swift format --in-place --recursive Sources Tests`.
 
