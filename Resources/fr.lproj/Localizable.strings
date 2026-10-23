@@ -1,0 +1,104 @@
+/* French. Keys are the English text; a key left out shows in English. */
+
+/* Panel */
+"Check now" = "Vérifier maintenant";
+"%@ announced" = "%@ annoncée";
+"Scheduled time passed, waiting for it to land" = "Heure prévue passée, en attente de son arrivée";
+"in %@" = "dans %@";
+"Time not given yet" = "Heure pas encore communiquée";
+"View post" = "Voir la publication";
+"No reset announced" = "Aucune réinitialisation annoncée";
+"Checking…" = "Vérification…";
+"Couldn't reach codex-resets.com" = "Impossible de joindre codex-resets.com";
+"Last reset %@" = "Dernière réinitialisation %@";
+"Every %.1f days on average" = "En moyenne tous les %.1f jours";
+"Checked %@" = "Vérifié à %@";
+"Data from codex-resets.com" = "Données de codex-resets.com";
+"Quit" = "Quitter";
+"Check for Updates…" = "Rechercher les mises à jour…";
+"Running from a temporary location" = "Exécution depuis un emplacement temporaire";
+"Quit, move Codex Reset Radar to Applications and open it from there. Launch at login is disabled until then, because it would point at a path that disappears." = "Quittez, déplacez Codex Reset Radar dans Applications et ouvrez-le depuis cet endroit. D’ici là, l’ouverture à la connexion est désactivée, car elle pointerait vers un chemin qui disparaît.";
+"Launch at login" = "Ouvrir à la connexion";
+"Open Login Items" = "Ouvrir Éléments de connexion";
+"Approve Codex Reset Radar in System Settings → General → Login Items." = "Autorisez Codex Reset Radar dans Réglages Système → Général → Éléments de connexion.";
+"Couldn't enable launch at login: %@" = "Impossible d’activer l’ouverture à la connexion : %@";
+"Couldn't disable launch at login: %@" = "Impossible de désactiver l’ouverture à la connexion : %@";
+"Notifications are off" = "Les notifications sont désactivées";
+"You won't hear when a reset is announced or lands." = "Vous ne saurez pas quand une réinitialisation est annoncée ou effectuée.";
+"Open Notification Settings" = "Ouvrir les réglages Notifications";
+"Notify me about" = "M’avertir pour";
+"Announced" = "Annonce";
+"Reminder" = "Rappel";
+"Landed" = "Arrivée";
+"Reminder lead time" = "Délai du rappel";
+"%lld min" = "%lld min";
+
+/* Panel: watch forecast */
+"Forecast" = "Prévision";
+"%@, %lld%% chance" = "%1$@, %2$lld %% de probabilité";
+"View source" = "Voir la source";
+"AI guess, not an announcement" = "Estimation de l’IA, pas une annonce";
+"Elevated" = "Élevée";
+"Strong" = "Forte";
+
+/* Reset types */
+"Reset" = "Réinitialisation";
+"Banked reset" = "Réinitialisation en réserve";
+"reset" = "réinitialisation";
+"banked reset" = "réinitialisation en réserve";
+
+/* Notifications */
+"Codex %@ announced" = "Codex : %@ annoncée";
+"Codex %@ rescheduled" = "Codex : %@ reprogrammée";
+"Codex %@ landed" = "Codex : %@ effectuée";
+"Your usage limits are back." = "Vos limites d’utilisation sont rétablies.";
+"That's reset #%lld 🎉" = "C’est la réinitialisation nº %lld 🎉";
+"Codex %@ in %lld minutes" = "Codex : %@ dans %lld minutes";
+
+/* Menu bar countdown: 45m, 1h 59m, 9h, 3d, due */
+"due" = "maint.";
+/* Menu bar, past due under Reduce Motion (in place of the hourglass) */
+"Now" = "Maint.";
+"%lldm" = "%lldm";
+"%lldh %lldm" = "%lldh %lldm";
+"%lldh" = "%lldh";
+"%lldd" = "%lldj";
+
+/* VoiceOver */
+"spoken-due" = "maintenant";
+"1 minute" = "1 minute";
+"%lld minutes" = "%lld minutes";
+"1 hour" = "1 heure";
+"%lld hours" = "%lld heures";
+"%lld days" = "%lld jours";
+"%@, offline, %@" = "%1$@, hors ligne, %2$@";
+"%@, offline" = "%@, hors ligne";
+"checking for resets" = "recherche de réinitialisations en cours";
+"no reset announced" = "aucune réinitialisation annoncée";
+"reset announced, time not given yet" = "réinitialisation annoncée, heure pas encore communiquée";
+"reset due" = "réinitialisation attendue maintenant";
+"reset in %@" = "réinitialisation dans %@";
+
+/* Shortcuts and Siri (phrases are in AppShortcuts.strings) */
+"Get Next Codex Reset" = "Obtenir la prochaine réinitialisation de Codex";
+"Returns the pending Codex reset, or nothing when no reset is announced." = "Renvoie la réinitialisation de Codex en attente, ou rien si aucune réinitialisation n’est annoncée.";
+"Next Codex Reset" = "Prochaine réinitialisation de Codex";
+"The next Codex %@ is %@, in %@." = "La prochaine %1$@ de Codex est prévue le %2$@, dans %3$@.";
+"A Codex %@ was due %@ and hasn't landed yet." = "Une %1$@ de Codex était prévue le %2$@ et n’a pas encore eu lieu.";
+"A Codex %@ is announced, but its time isn't given yet." = "Une %@ de Codex est annoncée, mais son heure n’est pas encore communiquée.";
+"No Codex reset is announced." = "Aucune réinitialisation de Codex n’est annoncée.";
+"Codex Reset Radar hasn't loaded the reset status yet. Try again in a moment." = "Codex Reset Radar n’a pas encore chargé l’état des réinitialisations. Réessayez dans un instant.";
+"Codex Reset" = "Réinitialisation de Codex";
+"Scheduled For" = "Prévue le";
+"Scheduled for %@" = "Prévue le %@";
+"Type" = "Type";
+"Announcement" = "Annonce";
+"Source" = "Source";
+
+/* Poll failures */
+"Rate limited, retrying at %@" = "Trop de requêtes, nouvelle tentative à %@";
+"codex-resets.com is having trouble" = "codex-resets.com rencontre des problèmes";
+"Request timed out" = "Délai de la requête dépassé";
+"You're offline" = "Vous êtes hors ligne";
+"Unexpected response from codex-resets.com" = "Réponse inattendue de codex-resets.com";
+"codex-resets.com returned HTTP %lld" = "codex-resets.com a répondu HTTP %lld";
