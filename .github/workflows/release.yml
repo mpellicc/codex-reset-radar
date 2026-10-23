@@ -33,8 +33,7 @@ jobs:
   build:
     needs: release-please
     if: needs.release-please.outputs.release_created == 'true'
-    # Latest stable image and Xcode on GitHub. Xcode 27's SwiftPM records the deployment target
-    # instead of the SDK in the binary, which puts the app in macOS 13 compatibility mode.
+    # Latest stable image and Xcode on GitHub.
     runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
@@ -54,6 +53,9 @@ jobs:
             exit 1
           fi
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $GITHUB_RUN_NUMBER" Resources/Info.plist
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
 
       - name: Build, sign and zip
         run: scripts/build-app.sh

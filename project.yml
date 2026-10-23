@@ -1,0 +1,49 @@
+# XcodeGen spec for the app bundle. scripts/build-app.sh generates CodexResetRadar.xcodeproj from it;
+# the project is not committed. Package.swift stays for `swift build`, `swift test` and `swift run`.
+name: CodexResetRadar
+options:
+  deploymentTarget:
+    macOS: "15.0"
+  developmentLanguage: en
+packages:
+  # The version comes from Package.resolved, which build-app.sh copies into the generated project.
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: 2.10.0
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "15.0"
+  configs:
+    Release:
+      # Universal, like the SwiftPM build it replaces.
+      ARCHS: "arm64 x86_64"
+      ONLY_ACTIVE_ARCH: NO
+targets:
+  RadarCore:
+    type: library.static
+    platform: macOS
+    sources: [Sources/RadarCore]
+  CodexResetRadar:
+    type: application
+    platform: macOS
+    sources:
+      - Sources/CodexResetRadar
+      - path: Resources
+        excludes: [Info.plist]
+    dependencies:
+      - target: RadarCore
+      # Xcode embeds Sparkle.framework, a binary package product, in Contents/Frameworks on its own.
+      - package: Sparkle
+    settings:
+      base:
+        PRODUCT_NAME: CodexResetRadar
+        PRODUCT_BUNDLE_IDENTIFIER: dev.mpellicc.CodexResetRadar
+        INFOPLIST_FILE: Resources/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: ""
+        # Ad-hoc signed, as before: no team, no hardened runtime.
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"
+        DEVELOPMENT_TEAM: ""
+        ENABLE_HARDENED_RUNTIME: NO

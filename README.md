@@ -64,7 +64,9 @@ scripts/build-app.sh
 ```
 
 Produces `dist/Codex Reset Radar.app` and `dist/CodexResetRadar-<version>.zip`.
-Needs Xcode (for the universal arm64 + x86_64 build). See [SPEC.md](SPEC.md) for behaviour.
+Needs Xcode and [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`): the script
+generates `CodexResetRadar.xcodeproj` from `project.yml` and builds the app with `xcodebuild`.
+`swift build`, `swift test` and `swift run` still work from `Package.swift`. See [SPEC.md](SPEC.md) for behaviour.
 
 To format the code before committing, run `swift format --in-place --recursive Sources Tests`.
 
