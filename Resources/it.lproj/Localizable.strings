@@ -71,8 +71,8 @@
 "1 hour" = "1 ora";
 "%lld hours" = "%lld ore";
 "%lld days" = "%lld giorni";
-"%@, offline, %@" = "%1$@, non in linea, %2$@";
-"%@, offline" = "%@, non in linea";
+"%@, offline, %@" = "%1$@, offline, %2$@";
+"%@, offline" = "%@, offline";
 "checking for resets" = "controllo delle reimpostazioni in corso";
 "no reset announced" = "nessuna reimpostazione annunciata";
 "reset announced, time not given yet" = "reimpostazione annunciata, orario non ancora comunicato";
