@@ -6,6 +6,11 @@ struct RadarPanel: View {
     @EnvironmentObject private var model: RadarModel
     @EnvironmentObject private var updater: Updater
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var sweeps = 0
+    @State private var codexWord = SecretWord("codex")
+    @State private var keyMonitor: Any?
+
     private let isTranslocated = Translocation.isTranslocated(bundleURL: Bundle.main.bundleURL)
 
     var body: some View {
@@ -28,10 +33,47 @@ struct RadarPanel: View {
         .fixedSize(horizontal: false, vertical: true)
         .tint(.signalBlue)
         .modifier(NoFocusEffect())
+        // A button usually holds keyboard focus in the panel, and AppKit controls take key presses
+        // before `onKeyPress` would see them, so the panel's key events are watched directly.
+        .onAppear(perform: watchForSecretWord)
+        // The panel is hidden and shown again rather than rebuilt, so a half-typed word is
+        // dropped when its window closes.
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)) { _ in
+            codexWord.reset()
+        }
+    }
+
+    /// Only the letters of the word are taken, so every other key reaches the focused control.
+    private func watchForSecretWord() {
+        guard keyMonitor == nil else { return }
+        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            guard event.window is MenuBarPanel,
+                event.modifierFlags.intersection([.command, .option, .control]).isEmpty,
+                let letter = event.charactersIgnoringModifiers?.first, codexWord.isPart(of: letter)
+            else { return event }
+            if codexWord.type(letter) {
+                ping()
+            }
+            return nil
+        }
+    }
+
+    /// Easter egg: typing "codex" sweeps the radar once and plays a short system sound.
+    /// Under Reduce Motion, the sound alone.
+    private func ping() {
+        NSSound(named: "Ping")?.play()
+        if !reduceMotion {
+            sweeps += 1
+        }
     }
 
     private var header: some View {
-        HStack {
+        HStack(spacing: 6) {
+            // The menu bar's radar symbol: the needle and outer ring turn once for each sweep.
+            MenuBarLabel.radar
+                .symbolEffect(.rotate.byLayer, value: sweeps)
+                .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
             Text("Codex Reset Radar").font(.headline)
             Spacer()
             Button {
@@ -119,6 +161,38 @@ struct RadarPanel: View {
                     .keyboardShortcut("q")
             }
         }
+    }
+}
+
+/// Matches a word typed one letter at a time, ignoring case. It remembers only how far into the word it is.
+private struct SecretWord {
+    private let letters: [Character]
+    private var matched = 0
+
+    init(_ word: String) {
+        letters = Array(word.lowercased())
+    }
+
+    /// Whether `letter` is one this word can use, so any other key is left alone.
+    func isPart(of letter: Character) -> Bool {
+        letters.contains(Character(letter.lowercased()))
+    }
+
+    /// Takes the next letter; true when it completes the word.
+    mutating func type(_ letter: Character) -> Bool {
+        let letter = Character(letter.lowercased())
+        if letter == letters[matched] {
+            matched += 1
+        } else {
+            matched = letter == letters[0] ? 1 : 0
+        }
+        guard matched == letters.count else { return false }
+        matched = 0
+        return true
+    }
+
+    mutating func reset() {
+        matched = 0
     }
 }
 

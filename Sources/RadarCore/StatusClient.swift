@@ -94,7 +94,20 @@ public struct Source: Decodable, Sendable {
 }
 
 public struct Stats: Decodable, Sendable {
+    /// How many resets the source has recorded, the latest one included. Decoded leniently: a missing or
+    /// malformed count reads as unknown, so it can never fail the poll that carries the announcement.
+    public let total: Int?
     public let avgIntervalDays: Double?
+
+    private enum CodingKeys: String, CodingKey {
+        case total, avgIntervalDays
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        total = try? container.decodeIfPresent(Int.self, forKey: .total)
+        avgIntervalDays = try container.decodeIfPresent(Double.self, forKey: .avgIntervalDays)
+    }
 }
 
 private struct StatusResponse: Decodable {

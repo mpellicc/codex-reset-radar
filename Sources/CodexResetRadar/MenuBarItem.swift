@@ -139,7 +139,7 @@ struct MenuBarLabel: View {
     }
 
     // The custom symbol is compiled into the built .app only; `swift run` falls back to an SF Symbol.
-    private static let radar: Image =
+    static let radar: Image =
         NSImage(symbolName: "RadarMenuBar", bundle: .main, variableValue: 1) != nil
         ? Image("RadarMenuBar") : Image(systemName: "dot.radiowaves.left.and.right")
 }
