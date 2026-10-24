@@ -149,6 +149,12 @@ The cask bump needs `HOMEBREW_TAP_TOKEN`: a fine-grained token with Contents rea
 and Homebrew keeps offering the previous version. `scripts/setup-release-secrets.sh` walks through
 setting both secrets.
 
+## Contributing
+
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md). Everyone taking part follows the
+[Code of Conduct](.github/CODE_OF_CONDUCT.md). Report security problems privately, as
+[SECURITY.md](.github/SECURITY.md) describes.
+
 ## License
 
 The code is released under the [MIT License](LICENSE).
