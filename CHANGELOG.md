@@ -4,6 +4,23 @@ All notable changes to this project are documented here. The format follows
 [Conventional Commits](https://www.conventionalcommits.org/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [0.12.0](https://github.com/mpellicc/codex-reset-radar/compare/v0.11.0...v0.12.0) (2026-10-24)
+
+
+### Features
+
+* explain paused checks and show when the data last updated ([#104](https://github.com/mpellicc/codex-reset-radar/issues/104)) ([8f3d0b1](https://github.com/mpellicc/codex-reset-radar/commit/8f3d0b113410679ada39b3e8acea783c693b3e4c))
+
+
+### Bug Fixes
+
+* log whether macOS accepts each notification and drop non-web source links ([#103](https://github.com/mpellicc/codex-reset-radar/issues/103)) ([3b347a8](https://github.com/mpellicc/codex-reset-radar/commit/3b347a84b6ce1dbcb5fac8f383d6ef599b87d00b))
+
+
+### Documentation
+
+* add community health files ([#102](https://github.com/mpellicc/codex-reset-radar/issues/102)) ([69a28ef](https://github.com/mpellicc/codex-reset-radar/commit/69a28ef63f2915f224f9c2b2d070728d0400d624))
+
 ## [0.11.0](https://github.com/mpellicc/codex-reset-radar/compare/v0.10.2...v0.11.0) (2026-10-23)
 
 
