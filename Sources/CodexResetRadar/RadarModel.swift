@@ -8,6 +8,8 @@ import os
 final class RadarModel: ObservableObject {
     @Published private(set) var status: StatusData?
     @Published private(set) var lastChecked: Date?
+    /// When a poll last succeeded. Differs from `lastChecked` while polls fail and the panel shows older data.
+    @Published private(set) var lastUpdated: Date?
     @Published private(set) var lastError: String?
     @Published private(set) var isRefreshing = false
     /// True after two polls in a row failed; the menu bar icon shows it.
@@ -29,8 +31,9 @@ final class RadarModel: ObservableObject {
     private let pathMonitor = NWPathMonitor()
     private var reconnect = ReconnectDebounce()
     private var failures = FailureCounter()
-    /// Set after a 429 (or 503 with `Retry-After`); polls before it are skipped.
-    private var retryNotBefore: Date?
+    /// Set after a 429 (or 503 with `Retry-After`); polls before it are skipped, and the panel's
+    /// refresh button is disabled until then.
+    @Published private(set) var retryNotBefore: Date?
 
     init() {
         notificationPreferences = notifier.preferences
@@ -92,6 +95,7 @@ final class RadarModel: ObservableObject {
                 self.status = status
                 lastError = nil
                 retryNotBefore = nil
+                lastUpdated = Date()
                 failures.recordSuccess()
                 isOffline = false
                 notifier.process(status)

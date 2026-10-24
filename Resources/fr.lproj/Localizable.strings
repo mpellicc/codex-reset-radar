@@ -2,6 +2,7 @@
 
 /* Panel */
 "Check now" = "Vérifier maintenant";
+"Checking paused until %@" = "Vérifications suspendues jusqu’à %@";
 "%@ announced" = "%@ annoncée";
 "Scheduled time passed, waiting for it to land" = "Heure prévue passée, en attente de son arrivée";
 "in %@" = "dans %@";
@@ -13,6 +14,7 @@
 "Last reset %@" = "Dernière réinitialisation %@";
 "Every %.1f days on average" = "En moyenne tous les %.1f jours";
 "Checked %@" = "Vérifié à %@";
+"Last updated %@" = "Dernière mise à jour %@";
 "Data from codex-resets.com" = "Données de codex-resets.com";
 "Quit" = "Quitter";
 "Check for Updates…" = "Rechercher les mises à jour…";

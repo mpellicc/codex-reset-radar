@@ -2,6 +2,7 @@
 
 /* Panel */
 "Check now" = "立即检查";
+"Checking paused until %@" = "检查已暂停，将于 %@ 恢复";
 "%@ announced" = "%@已公布";
 "Scheduled time passed, waiting for it to land" = "预定时间已过，等待生效";
 "in %@" = "%@后";
@@ -13,6 +14,7 @@
 "Last reset %@" = "上次重置：%@";
 "Every %.1f days on average" = "平均每%.1f天一次";
 "Checked %@" = "检查于 %@";
+"Last updated %@" = "上次更新：%@";
 "Data from codex-resets.com" = "数据来自 codex-resets.com";
 "Quit" = "退出";
 "Check for Updates…" = "检查更新…";
