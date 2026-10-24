@@ -90,7 +90,28 @@ private enum ResetType {
 }
 
 public struct Source: Decodable, Sendable {
+    /// The post's link. Only http and https are kept: the app opens it as is, and a `file:` or app-scheme URL
+    /// from the API must never reach `NSWorkspace.open`.
     public let url: URL?
+
+    private enum CodingKeys: String, CodingKey {
+        case url
+    }
+
+    init(url: URL?) {
+        self.url = url
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let url = try container.decodeIfPresent(URL.self, forKey: .url)
+        if let url, !["http", "https"].contains(url.scheme?.lowercased()) {
+            Log.poll.error("source url ignored, scheme \(url.scheme ?? "none", privacy: .public) is not http(s)")
+            self.url = nil
+        } else {
+            self.url = url
+        }
+    }
 }
 
 public struct Stats: Decodable, Sendable {

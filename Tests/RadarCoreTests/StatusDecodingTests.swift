@@ -62,4 +62,24 @@ final class StatusDecodingTests: XCTestCase {
             """
         XCTAssertThrowsError(try StatusClient.decode(Data(bad.utf8)))
     }
+
+    private func sourceURL(_ url: String) throws -> URL? {
+        let json = """
+            {"data":{"latest_reset":null,"scheduled_reset":{"id":"1","reset_type":"regular",\
+            "announced_at":"2026-10-22T06:55:54Z","scheduled_for":null,"text":"Soon.",\
+            "source":{"url":"\(url)"}},"stats":{}}}
+            """
+        return try XCTUnwrap(StatusClient.decode(Data(json.utf8)).scheduledReset).source.url
+    }
+
+    func testSourceURLKeepsHTTPAndHTTPS() throws {
+        XCTAssertEqual(try sourceURL("https://x.com/a/status/1"), URL(string: "https://x.com/a/status/1"))
+        XCTAssertEqual(try sourceURL("HTTP://example.com"), URL(string: "HTTP://example.com"))
+    }
+
+    func testSourceURLDropsOtherSchemes() throws {
+        XCTAssertNil(try sourceURL("file:///Applications/Calculator.app"))
+        XCTAssertNil(try sourceURL("x-apple.systempreferences:com.apple.preference.security"))
+        XCTAssertNil(try sourceURL("javascript:alert(1)"))
+    }
 }

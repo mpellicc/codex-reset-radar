@@ -98,8 +98,9 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
             content.userInfo = ["url": url.absoluteString]
         }
         let stamp = Int(when.timeIntervalSince1970)
-        center.add(UNNotificationRequest(identifier: "reset-\(reset.id)-\(stamp)", content: content, trigger: nil))
-        Log.notify.notice("announcement sent for reset \(reset.id, privacy: .public)")
+        submit(
+            UNNotificationRequest(identifier: "reset-\(reset.id)-\(stamp)", content: content, trigger: nil),
+            describing: "announcement for reset \(reset.id)")
     }
 
     private func notifyIfLanded(_ latest: Reset?, total: Int?) {
@@ -120,8 +121,9 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
         }
         content.sound = .default
         content.userInfo = ["url": Self.homepage.absoluteString]
-        center.add(UNNotificationRequest(identifier: "landed-\(landed.id)", content: content, trigger: nil))
-        Log.notify.notice("landed notification sent for reset \(landed.id, privacy: .public)")
+        submit(
+            UNNotificationRequest(identifier: "landed-\(landed.id)", content: content, trigger: nil),
+            describing: "landed notification for reset \(landed.id)")
     }
 
     /// Keeps a single scheduled request in step with the pending reset. It is replaced when the
@@ -149,10 +151,24 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
         let fields: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute, .second]
         let trigger = UNCalendarNotificationTrigger(
             dateMatching: Calendar.current.dateComponents(fields, from: reminder.fireDate), repeats: false)
-        center.add(UNNotificationRequest(identifier: Self.reminderID, content: content, trigger: trigger))
-        Log.notify.notice(
-            "reminder scheduled for \(reminder.fireDate.ISO8601Format(), privacy: .public) (reset \(reset.id, privacy: .public)), replacing any pending one"
-        )
+        submit(
+            UNNotificationRequest(identifier: Self.reminderID, content: content, trigger: trigger),
+            describing:
+                "reminder for \(reminder.fireDate.ISO8601Format()) (reset \(reset.id)), replacing any pending one")
+    }
+
+    /// Hands a request to the system and logs whether it took it. A refused request is not retried: the usual
+    /// cause is notifications switched off in System Settings, and a late banner would be stale by then.
+    private func submit(_ request: UNNotificationRequest, describing what: String) {
+        // The completion runs on a background queue; @Sendable keeps it off the main actor.
+        center.add(request) { @Sendable error in
+            if let error {
+                Log.notify.error(
+                    "\(what, privacy: .public) refused by the system: \(error.localizedDescription, privacy: .public)")
+            } else {
+                Log.notify.notice("\(what, privacy: .public) accepted by the system")
+            }
+        }
     }
 
     // The center calls its delegate on a background queue, so these hop to the main actor where needed.
