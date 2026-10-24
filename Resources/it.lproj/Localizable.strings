@@ -2,6 +2,7 @@
 
 /* Panel */
 "Check now" = "Controlla ora";
+"Checking paused until %@" = "Controlli sospesi fino alle %@";
 "%@ announced" = "%@ annunciata";
 "Scheduled time passed, waiting for it to land" = "Orario previsto passato, in attesa che arrivi";
 "in %@" = "tra %@";
@@ -13,6 +14,7 @@
 "Last reset %@" = "Ultima reimpostazione %@";
 "Every %.1f days on average" = "In media ogni %.1f giorni";
 "Checked %@" = "Controllato alle %@";
+"Last updated %@" = "Ultimo aggiornamento %@";
 "Data from codex-resets.com" = "Dati da codex-resets.com";
 "Quit" = "Esci";
 "Check for Updates…" = "Controlla aggiornamenti…";

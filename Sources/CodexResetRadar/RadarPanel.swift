@@ -66,6 +66,11 @@ struct RadarPanel: View {
         }
     }
 
+    /// When a 429 or 503 paused polling, until when; nil once the pause is over. Re-read on the minute tick.
+    private var pausedUntil: Date? {
+        model.retryNotBefore.flatMap { $0 > model.now ? $0 : nil }
+    }
+
     private var header: some View {
         HStack(spacing: 6) {
             // The menu bar's radar symbol: the needle and outer ring turn once for each sweep.
@@ -81,8 +86,8 @@ struct RadarPanel: View {
                 Image(systemName: "arrow.clockwise")
             }
             .buttonStyle(.borderless)
-            .disabled(model.isRefreshing)
-            .help("Check now")
+            .disabled(model.isRefreshing || pausedUntil != nil)
+            .help(pausedUntil.map { LocalizedStringKey("Checking paused until \(Format.clock($0))") } ?? "Check now")
         }
     }
 
@@ -132,6 +137,10 @@ struct RadarPanel: View {
             }
             if let checked = model.lastChecked {
                 Text("Checked \(checked.formatted(date: .omitted, time: .shortened))")
+                    .foregroundStyle(.secondary)
+            }
+            if model.lastError != nil, let updated = model.lastUpdated {
+                Text("Last updated \(Format.relative(updated, to: model.now))")
                     .foregroundStyle(.secondary)
             }
             if let error = model.lastError {
