@@ -56,6 +56,7 @@ swift test
   Follow [docs/agents/localization.md](../docs/agents/localization.md). If you can't translate a
   string into a language, say so in the pull request.
 - **Behaviour changes** update [SPEC.md](../SPEC.md).
+- **Bug fixes and new behaviour** come with tests.
 
 ## Pull requests
 
